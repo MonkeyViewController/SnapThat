@@ -15,4 +15,9 @@
     <string name="parse_app_id">VHYA7I2mdzHxFUAgp5UZKaz0DAUltHOmcbemlHo9</string>
     <string name="parse_client_id">nJrIc9nQxxunMpG6jgYV0Zhw61SrXqUtyoESCGiy</string>
 
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
 </resources>
