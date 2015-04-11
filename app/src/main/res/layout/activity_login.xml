@@ -10,9 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Username"
         android:ems="10"
-        android:id="@+id/editText2"
+        android:id="@+id/etLoginUsername"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp" />
 
@@ -20,19 +20,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
+        android:hint="Password"
         android:ems="10"
         android:id="@+id/editText"
-        android:layout_below="@+id/editText2"
+        android:layout_below="@+id/etLoginUsername"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="43dp" />
+        android:layout_marginTop="20dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Log In"
-        android:id="@+id/button"
+        android:id="@+id/btnLoginLogin"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="145dp" />
+        android:layout_marginBottom="50dp" />
 
 </RelativeLayout>

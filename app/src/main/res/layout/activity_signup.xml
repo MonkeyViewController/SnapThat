@@ -9,48 +9,53 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
+        android:inputType="text"
+        android:hint="Username"
         android:ems="10"
-        android:id="@+id/editText3"
+        android:id="@+id/etSignupUsername"
         android:layout_marginTop="46dp"
         android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/editText5"
-        android:layout_alignStart="@+id/editText5" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/editText4"
-        android:layout_below="@+id/editText5"
         android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
+        android:hint="Email Address"
         android:ems="10"
-        android:id="@+id/editText5"
-        android:layout_below="@+id/editText3"
+        android:id="@+id/etSignupEmail"
+        android:layout_below="@+id/etSignupUsername"
         android:layout_centerHorizontal="true" />
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView2"
-        android:layout_above="@+id/btnSelectBirthday"
+        android:inputType="textPassword"
+        android:hint="Password"
+        android:ems="10"
+        android:id="@+id/etSignupPassword"
+        android:layout_below="@+id/etSignupEmail"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="Birthday"
+        android:ems="10"
+        android:id="@+id/etSignupBirthday"
+        android:layout_below="@+id/etSignupPassword"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Birthday"
-        android:id="@+id/btnSelectBirthday"
-        android:layout_above="@+id/button2"
+        android:id="@+id/btnSignupBirthday"
+        android:layout_below="@+id/etSignupBirthday"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="76dp" />
 
@@ -58,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:id="@+id/button2"
+        android:id="@+id/btnSignupSignup"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="78dp" />
