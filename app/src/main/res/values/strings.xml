@@ -4,5 +4,15 @@
     <string name="app_name">SnapThat</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_signup">SignupActivity</string>
+    <string name="title_activity_signup_or_login">SignupOrLoginActivity</string>
+
+    <string name="login_button">Log In</string>
+    <string name="signup_button">Sign Up</string>
+
+    <string name="parse_app_id">VHYA7I2mdzHxFUAgp5UZKaz0DAUltHOmcbemlHo9</string>
+    <string name="parse_client_id">nJrIc9nQxxunMpG6jgYV0Zhw61SrXqUtyoESCGiy</string>
 
 </resources>
