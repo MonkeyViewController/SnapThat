@@ -1,14 +1,12 @@
 package com.monkeyviewcontroller.snapthat;
 
 import android.app.Application;
+import com.parse.Parse;
 
-/**
- * Created by Josh on 4/10/2015.
- */
 public class SnapThatApplication extends Application {
 
     public void onCreate(){
-        //Parse.enableLocalDatastore(this);
-        //Parse.initialize(this,getString(R.string.parse_app_id), getString(R.string.parse_client_id));
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this,getString(R.string.parse_app_id), getString(R.string.parse_client_id));
     }
 }
