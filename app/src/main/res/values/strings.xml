@@ -4,22 +4,24 @@
     <string name="app_name">SnapThat</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_login">Log In</string>
     <string name="title_activity_signup">Sign Up</string>
     <string name="title_activity_signup_or_login">SnapThat</string>
+    <string name="title_section1">Friends</string>
+    <string name="title_section2">Snaps</string>
+    <string name="title_section3">Games</string>
+    <string name="title_activity_camera">CameraActivity</string>
+    <string name="title_activity_main">Main Activity</string>
     <string name="login_button">Log In</string>
     <string name="signup_button">Sign Up</string>
     <string name="parse_app_id">VHYA7I2mdzHxFUAgp5UZKaz0DAUltHOmcbemlHo9</string>
     <string name="parse_client_id">nJrIc9nQxxunMpG6jgYV0Zhw61SrXqUtyoESCGiy</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="title_activity_camera">CameraActivity</string>
-
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

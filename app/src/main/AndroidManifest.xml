@@ -19,10 +19,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main" >
-        </activity>
-        <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
@@ -37,6 +33,10 @@
         <activity
             android:name=".CameraActivity"
             android:label="@string/title_activity_camera" >
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
         </activity>
     </application>
 
