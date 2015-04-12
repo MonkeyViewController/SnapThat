@@ -1,7 +1,9 @@
 package com.monkeyviewcontroller.snapthat;
 
+import android.app.Activity;
 import android.support.v4.app.DialogFragment;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class SignupActivity extends ActionBarActivity implements View.OnClickListener {
+public class SignupActivity extends FragmentActivity implements View.OnClickListener {
 
     private Button btnSignupBirthday;
     private static EditText etSignupBirthday;

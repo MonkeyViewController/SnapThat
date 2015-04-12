@@ -1,5 +1,6 @@
 package com.monkeyviewcontroller.snapthat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -7,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class SignupOrLoginActivity extends ActionBarActivity implements View.OnClickListener {
+public class SignupOrLoginActivity extends Activity implements View.OnClickListener {
 
     private Button btnLogin;
     private Button btnSignup;
