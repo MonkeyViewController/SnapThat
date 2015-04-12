@@ -45,9 +45,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(false);  // hides action bar icon
-        getSupportActionBar().setDisplayShowTitleEnabled(false); // hides action bar title
-
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -77,6 +74,9 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
+        actionBar.setDisplayShowHomeEnabled(false);  // hides action bar icon
+        actionBar.setDisplayShowTitleEnabled(false); // hides action bar title
     }
 
 

@@ -1,6 +1,7 @@
 package com.monkeyviewcontroller.snapthat;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
@@ -10,6 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class SignupActivity extends FragmentActivity {
 
@@ -104,9 +110,32 @@ public class SignupActivity extends FragmentActivity {
             focusView.requestFocus();
         }else {
             Log.d("MVC", "Proceed to signup via parse.");
-            //show progress bar
-            //perform user signup
-            //navigate them back to new activity?
+            final ProgressDialog pd = new ProgressDialog(this);
+            pd.setTitle("Please wait.");
+            pd.setMessage("Signing up, please wait.");
+            pd.show();
+
+            ParseUser user = new ParseUser();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.put("birthday",birthday);
+
+            user.signUpInBackground(new SignUpCallback() {
+                @Override
+                public void done(ParseException e) {
+
+                    pd.dismiss();
+
+                    if(e!=null) {
+                        Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }else {
+                        Intent intent = new Intent(SignupActivity.this, SignupOrLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
+            });
         }
     }
 

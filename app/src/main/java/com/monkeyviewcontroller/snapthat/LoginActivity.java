@@ -1,12 +1,19 @@
 package com.monkeyviewcontroller.snapthat;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 public class LoginActivity extends Activity {
 
@@ -67,8 +74,28 @@ public class LoginActivity extends Activity {
             focusView.requestFocus();
         }else {
             Log.d("MVC", "Proceed to login via parse.");
-            //show progress bar
-            //perform user login
+
+            final ProgressDialog pd = new ProgressDialog(this);
+            pd.setTitle("Please wait.");
+            pd.setMessage("Logging in, please wait.");
+            pd.show();
+
+            ParseUser.logInInBackground(username, password,new LogInCallback() {
+                @Override
+                public void done(ParseUser parseUser, ParseException e) {
+
+                    pd.dismiss();
+
+                    if(e!=null) {
+                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(LoginActivity.this, ParseUser.getCurrentUser().getUsername(), Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    }
+                }
+            });
         }
     }
 
