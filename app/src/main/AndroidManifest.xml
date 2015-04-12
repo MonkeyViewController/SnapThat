@@ -34,6 +34,10 @@
             android:name=".SignupOrLoginActivity"
             android:label="@string/title_activity_signup_or_login" >
         </activity>
+        <activity
+            android:name=".CameraActivity"
+            android:label="@string/title_activity_camera" >
+        </activity>
     </application>
 
 </manifest>
