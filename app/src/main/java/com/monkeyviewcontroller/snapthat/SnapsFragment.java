@@ -22,6 +22,7 @@ public class SnapsFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d("MVC", "Creating the snap tab");
 
+
         View rootView = inflater.inflate(R.layout.fragment_snaps, container, false);
         return rootView;
     }
