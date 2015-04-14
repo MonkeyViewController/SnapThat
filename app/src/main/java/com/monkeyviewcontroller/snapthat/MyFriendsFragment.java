@@ -1,92 +1,115 @@
 package com.monkeyviewcontroller.snapthat;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
+import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
+import com.monkeyviewcontroller.snapthat.Models.User;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
 
-import com.monkeyviewcontroller.snapthat.dummy.DummyContent;
+import java.util.Arrays;
+import java.util.List;
 
-public class MyFriendsFragment extends ListFragment {
+public class MyFriendsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private String currentUser;
+    private LinearLayout llProgressBar;
+    private LinearLayout llEmptyList;
+    private FriendListAdapter listAdapter;
+    private TextView tvEmptyList;
+    private ListView lvQueryResults;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    //private OnFragmentInteractionListener mListener;
-
-    // TODO: Rename and change types of parameters
-    public static MyFriendsFragment newInstance(String param1, String param2) {
-        MyFriendsFragment fragment = new MyFriendsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+    public static AddFriendsFragment newInstance() {
+        AddFriendsFragment fragment = new AddFriendsFragment();
         return fragment;
     }
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public MyFriendsFragment() {
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        Log.d("MVC", "Creating the AddFriendView");
+        final View rootView = inflater.inflate(R.layout.fragment_myfriends, container, false);
+
+        llProgressBar = (LinearLayout)rootView.findViewById(R.id.llProgressBar);
+        llProgressBar.setVisibility(View.VISIBLE);
+        llEmptyList = (LinearLayout)rootView.findViewById(R.id.llEmptyList);
+        lvQueryResults = (ListView)rootView.findViewById(R.id.lvQueryResults);
+        tvEmptyList = (TextView)rootView.findViewById(R.id.tvEmptyList);
+
+        loadAllFriends();
+
+        lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("MVC" , " I clicked something in add friends adapter....");
+            }
+        });
+
+        return rootView;
+    }
+
+    public void loadAllFriends()
+    {
+        showProgressDialog();
+
+        final ParseQuery<FriendRequest> friendRequestsOne = ParseQuery.getQuery(FriendRequest.class);
+        friendRequestsOne.whereEqualTo("friendTwo", currentUser);
+        friendRequestsOne.whereEqualTo("status", 1);
+
+        final ParseQuery<FriendRequest> friendRequestsTwo = ParseQuery.getQuery(FriendRequest.class);
+        friendRequestsTwo.whereEqualTo("friendOne", currentUser);
+        friendRequestsTwo.whereEqualTo("status", 1);
+
+        final ParseQuery<FriendRequest> combined = ParseQuery.or(Arrays.asList(friendRequestsOne, friendRequestsTwo));
+
+        combined.findInBackground(new FindCallback<FriendRequest>() {
+            public void done(List<FriendRequest> friendRequest, ParseException exception) {
+                hideProgressDialog();
+
+                listAdapter = new FriendListAdapter(getActivity(), friendRequest);
+
+                if (listAdapter.isEmpty()) {
+                    tvEmptyList.setText("No Pending Requests");
+                    llEmptyList.setVisibility(View.VISIBLE);
+                } else {
+                    lvQueryResults.setAdapter(listAdapter);
+                }
+            }
+        });
+    }
+
+    private void showProgressDialog() {
+        llProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressDialog() {
+        llProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        // TODO: Change Adapter to display your content
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS));
+        currentUser = getActivity().getIntent().getStringExtra("username");
     }
-
-    /*
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-        }
-    }
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
-    }*/
-
 }
