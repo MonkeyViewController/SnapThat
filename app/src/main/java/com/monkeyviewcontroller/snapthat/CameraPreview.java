@@ -11,6 +11,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.io.IOException;
+import java.util.List;
 
 /** A basic Camera preview class */
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
@@ -70,10 +71,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.setDisplayOrientation(90);
 
             Camera.Parameters params = mCamera.getParameters();
-
-            params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            List<Camera.Size> previewSizes = params.getSupportedPreviewSizes();
+           Camera.Size previewSize = previewSizes.get(0);
+            params.setPreviewSize(previewSize.width, previewSize.height);
             mCamera.setParameters(params);
-
             mCamera.startPreview();
 
         } catch (Exception e){
