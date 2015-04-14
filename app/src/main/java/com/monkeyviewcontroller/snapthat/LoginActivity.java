@@ -92,6 +92,8 @@ public class LoginActivity extends Activity {
                         Toast.makeText(LoginActivity.this, ParseUser.getCurrentUser().getUsername(), Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("username",ParseUser.getCurrentUser().getUsername());
+                        intent.putExtra("objectId", ParseUser.getCurrentUser().getObjectId());
                         startActivity(intent);
                     }
                 }

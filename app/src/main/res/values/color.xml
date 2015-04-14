@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="white_smoke">#D0D0D0</color>
+    <color name="black">#000000</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#00FF00</color>
+    <color name="gray">#808080</color>
+    <color name="gray_shadow">#838383</color>
+    <color name="gray_shadow_lite">#B8B8B8</color>
+
+    <color name="not_background">#E6FF0000</color>
+    <color name="not_highlight">#E6FFFFFF</color>
+
+    <color name="white_trans">#E6FFFFFF</color>
+    <color name="black_trans">#E6000000</color>
+    <color name="cppgreen_trans">#E600512B</color>
+    <color name="cppgold_trans">#E6F5BC23</color>
+    <color name="gray_trans">#CC808080</color>
+
+    <color name="menu_grey">#99333333</color>
+    <color name="ics_blue">#33B5E5</color>
+    <color name="custom_gray">#2f2f2f</color>
+    <color name="custom_green">#05f516</color>
+    <color name="custom_dark_back">#1b1b1b</color>
+    <color name="custom_divider">#717171</color>
+    <color name="custom_light_blue">#5fd9fc</color>
+    <color name="custom_light_gray">#727272</color>
+    <color name="custom_light_green">#33cc4e</color>
+</resources>

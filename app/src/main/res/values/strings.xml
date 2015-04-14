@@ -20,8 +20,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-
-<!-- TODO: Remove or change this placeholder text -->
+    <string name="error_adding_yourself">You can not add yourself</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

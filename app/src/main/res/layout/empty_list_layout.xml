@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/llEmptyList"
+	android:gravity="center"
+	android:orientation="vertical"
+	android:visibility="gone"
+	android:background="@android:color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+	<TextView
+		android:id="@+id/tvEmptyList"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center"
+		android:text="@null"/>
+
+</LinearLayout>
