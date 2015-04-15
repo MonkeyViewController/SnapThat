@@ -1,10 +1,12 @@
 package com.monkeyviewcontroller.snapthat;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,44 @@ public class SnapsFragment extends Fragment {
         Log.d("MVC", "Creating the snap tab");
         rootView = inflater.inflate(R.layout.fragment_snaps, container, false);
         safeCameraOpenInView(rootView);
+
+        Camera.PictureCallback mPicture = setupImageCapture();
+
+        setupCaptureButton(mPicture);
+
         return rootView;
+    }
+
+    private Camera.PictureCallback setupImageCapture(){
+        final Camera.PictureCallback mPicture = new Camera.PictureCallback() {
+            @Override
+            public void onPictureTaken(byte[] data, Camera camera) {
+                Log.d("Camera","Byte array created");
+
+               //TODO: Verify correctness of data captured
+
+                //Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                //String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
+                //Log.i("img",encodedImage);
+
+                //TODO: Transmit photo data to server/parse
+            }
+        };
+
+        return mPicture;
+    }
+
+    private void setupCaptureButton(final Camera.PictureCallback mPicture){
+        Button captureButton = (Button) rootView.findViewById(R.id.capture_button);
+
+        captureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Camera", "Capture Button Clicked");
+                mCamera.takePicture(null, null, mPicture);
+            }
+        });
     }
 
     public boolean safeCameraOpenInView(View view)
