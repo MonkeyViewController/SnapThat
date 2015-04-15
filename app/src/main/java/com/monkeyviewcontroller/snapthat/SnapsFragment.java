@@ -16,6 +16,7 @@ public class SnapsFragment extends Fragment {
 
     private Camera mCamera;
     private CameraPreview mPreview;
+    private View rootView;
 
     public static SnapsFragment newInstance() {
         SnapsFragment fragment = new SnapsFragment();
@@ -29,7 +30,7 @@ public class SnapsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d("MVC", "Creating the snap tab");
-        View rootView = inflater.inflate(R.layout.fragment_snaps, container, false);
+        rootView = inflater.inflate(R.layout.fragment_snaps, container, false);
         safeCameraOpenInView(rootView);
         return rootView;
     }
@@ -64,6 +65,18 @@ public class SnapsFragment extends Fragment {
             // Camera is not available (in use or does not exist)
         }
         return c; // returns null if camera is unavailable
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        releaseCameraAndPreview();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        safeCameraOpenInView(rootView);
     }
 
     /*
