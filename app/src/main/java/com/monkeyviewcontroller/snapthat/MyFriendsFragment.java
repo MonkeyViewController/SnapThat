@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -59,10 +60,22 @@ public class MyFriendsFragment extends Fragment {
 
         loadAllFriends();
 
+        //TODO: only show button when 1 item is selected, fade when scrolling, fix when it covers bottom row
         lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("MVC" , " I clicked something in add friends adapter....");
+
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Log.d("MVC", "checked item" + position);
+
+                CheckBox c = (CheckBox) view.findViewById(R.id.cbMyFriends);
+
+                if (c.isChecked()) {
+                    c.setChecked(false);
+
+                } else {
+                    c.setChecked(true);
+
+                }
             }
         });
 
