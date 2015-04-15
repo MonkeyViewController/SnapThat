@@ -3,6 +3,7 @@ package com.monkeyviewcontroller.snapthat;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 public class SnapsFragment extends Fragment {
 
@@ -48,9 +50,18 @@ public class SnapsFragment extends Fragment {
             public void onPictureTaken(byte[] data, Camera camera) {
                 Log.d("Camera","Byte array created");
 
-               //TODO: Verify correctness of data captured
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
 
-                //Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                // Use matrix to rotate bitmap image
+                // to compensate for 90 manual rotation in preview workaround
+                Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+                //TEMP: Set ImageView ontop of preview to display image
+                ImageView iv = (ImageView) rootView.findViewById(R.id.imageViewOfPicture);
+                iv.setImageBitmap(rotatedBitmap);
 
                 //String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
                 //Log.i("img",encodedImage);
