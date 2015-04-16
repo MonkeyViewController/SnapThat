@@ -8,10 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-public class SignupOrLoginActivity extends Activity implements View.OnClickListener {
+import com.parse.ParseUser;
+
+public class SignupOrLoginActivity extends Activity{
 
     private Button btnLogin;
     private Button btnSignup;
+    private Button btnBypass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,24 +22,36 @@ public class SignupOrLoginActivity extends Activity implements View.OnClickListe
         setContentView(R.layout.activity_signup_or_login);
 
         btnLogin = (Button)findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(this);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MVC", "Clicked button login");
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         btnSignup = (Button)findViewById(R.id.btnSignup);
-        btnSignup.setOnClickListener(this);
-    }
+        btnSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MVC", "Clicked button signup");
+                Intent intent = new Intent(v.getContext(), SignupActivity.class);
+                startActivity(intent);
+            }
+        });
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.btnLogin) {
-            Log.d("MVC", "Clicked button login");
-            Intent intent = new Intent(this, LoginActivity.class);
-            //intent.putExtra(EXTRA_MESSAGE, message);
-            startActivity(intent);
-        } else if (id == R.id.btnSignup) {
-            Log.d("MVC", "Clicked button signup");
-            Intent intent = new Intent(this, SignupActivity.class);
-            startActivity(intent);
-        }
+        btnBypass = (Button)findViewById(R.id.btnBypass);
+        btnBypass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MVC", "Clicked button bypass");
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("username", "test");
+                intent.putExtra("objectId", "Ha3KsBJJeJ");
+                startActivity(intent);
+            }
+        });
     }
 }
