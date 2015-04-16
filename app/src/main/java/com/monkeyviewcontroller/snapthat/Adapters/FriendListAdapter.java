@@ -22,11 +22,13 @@ public class FriendListAdapter extends ArrayAdapter<FriendRequest> {
     Context context;
     List<FriendRequest> friendRequests;
     private Boolean[] selected;
+    private String currentUser;
 
-    public FriendListAdapter(Context context, List<FriendRequest> objects) {
+    public FriendListAdapter(Context context, List<FriendRequest> objects, String currentUser) {
         super(context, R.layout.list_item_friendrequest, objects);
         this.context = context;
         this.friendRequests = objects;
+        this.currentUser = currentUser;
 
         selected = new Boolean[this.friendRequests.size()];
         Arrays.fill(selected, false);
@@ -38,9 +40,12 @@ public class FriendListAdapter extends ArrayAdapter<FriendRequest> {
         View view = inflater.inflate(R.layout.list_item_friend, parent, false);
 
         TextView tvItemTextUsername = (TextView) view.findViewById(R.id.tvItemTextUsername);
-        tvItemTextUsername.setText(friendRequests.get(position).getFriendOne());
 
-        //checkbox.setChecked(list.get(position).isSelected());
+        if(friendRequests.get(position).getFriendOne().equals(currentUser))
+            tvItemTextUsername.setText(friendRequests.get(position).getFriendTwo());
+        else
+            tvItemTextUsername.setText(friendRequests.get(position).getFriendOne());
+
         CheckBox cbMyFriends = (CheckBox)view.findViewById(R.id.cbMyFriends);
         cbMyFriends.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 

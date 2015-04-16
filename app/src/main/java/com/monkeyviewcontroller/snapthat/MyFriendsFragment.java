@@ -41,6 +41,7 @@ public class MyFriendsFragment extends Fragment {
     private ListView lvQueryResults;
     private FloatingActionButton fab;
     private Boolean[] selected;
+    private List<FriendRequest> friends;
 
     public static AddFriendsFragment newInstance() {
         AddFriendsFragment fragment = new AddFriendsFragment();
@@ -96,7 +97,15 @@ public class MyFriendsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("MVC", "Clicked the button");
+                Log.d("MVC", "Clicked the FAB button");
+
+                for(int i=0; i < selected.length; i++)
+                {
+                    if(selected[i])
+                    {
+                        Log.d("MVC", "Selected : " + friends.get(i).getFriendOne() + " " + friends.get(i).getFriendTwo());
+                    }
+                }
             }
         });
 
@@ -118,17 +127,17 @@ public class MyFriendsFragment extends Fragment {
         final ParseQuery<FriendRequest> combined = ParseQuery.or(Arrays.asList(friendRequestsOne, friendRequestsTwo));
 
         combined.findInBackground(new FindCallback<FriendRequest>() {
-            public void done(List<FriendRequest> friendRequest, ParseException exception) {
+            public void done(List<FriendRequest> friendRequests, ParseException exception) {
                 hideProgressDialog();
-
-                listAdapter = new FriendListAdapter(getActivity(), friendRequest);
+                friends = friendRequests;
+                listAdapter = new FriendListAdapter(getActivity(), friends, currentUser);
 
                 if (listAdapter.isEmpty()) {
                     tvEmptyList.setText("No Friends, Go Add Some!");
                     llEmptyList.setVisibility(View.VISIBLE);
                 } else {
                     lvQueryResults.setAdapter(listAdapter);
-                    selected = new Boolean[friendRequest.size()];
+                    selected = new Boolean[friends.size()];
                     Arrays.fill(selected, false);
                 }
             }

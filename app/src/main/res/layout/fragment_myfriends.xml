@@ -22,9 +22,9 @@
         android:id="@+id/pink_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_icon="@android:drawable/ic_delete"
-        fab:fab_colorNormal="@color/red"
-        fab:fab_colorPressed="@color/green"
+        fab:fab_icon="@android:drawable/ic_menu_more"
+        fab:fab_colorNormal="@color/custom_light_blue"
+        fab:fab_colorPressed="@color/ics_blue"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"/>
