@@ -11,18 +11,19 @@
         android:textIsSelectable="false"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnAccept"
-        android:text="+"
+        android:src="@android:drawable/ic_menu_add"
         android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnCancel"
-        android:text="-"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
         android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

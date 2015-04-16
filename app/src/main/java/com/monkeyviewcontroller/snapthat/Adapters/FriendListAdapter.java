@@ -7,9 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.List;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.R;
@@ -18,11 +21,15 @@ public class FriendListAdapter extends ArrayAdapter<FriendRequest> {
 
     Context context;
     List<FriendRequest> friendRequests;
+    private Boolean[] selected;
 
     public FriendListAdapter(Context context, List<FriendRequest> objects) {
         super(context, R.layout.list_item_friendrequest, objects);
         this.context = context;
         this.friendRequests = objects;
+
+        selected = new Boolean[this.friendRequests.size()];
+        Arrays.fill(selected, false);
     }
 
     @Override
@@ -32,6 +39,18 @@ public class FriendListAdapter extends ArrayAdapter<FriendRequest> {
 
         TextView tvItemTextUsername = (TextView) view.findViewById(R.id.tvItemTextUsername);
         tvItemTextUsername.setText(friendRequests.get(position).getFriendOne());
+
+        //checkbox.setChecked(list.get(position).isSelected());
+        CheckBox cbMyFriends = (CheckBox)view.findViewById(R.id.cbMyFriends);
+        cbMyFriends.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                selected[position] = isChecked;
+            }
+        });
+
+        cbMyFriends.setChecked(selected[position]);
 
         ImageButton btnSettings = (ImageButton) view.findViewById(R.id.ibtnSettings);
         btnSettings.setOnClickListener(new View.OnClickListener() {

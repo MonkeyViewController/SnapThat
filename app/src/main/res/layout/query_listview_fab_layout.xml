@@ -21,6 +21,8 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
 		android:id="@+id/lvQueryResults"
-		android:dividerHeight="1dp"/>
+		android:dividerHeight="1dp"
+        android:paddingBottom="100dp"
+        android:clipToPadding="false"/>
 
 </LinearLayout>

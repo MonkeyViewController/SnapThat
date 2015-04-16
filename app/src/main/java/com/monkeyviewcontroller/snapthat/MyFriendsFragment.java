@@ -1,6 +1,7 @@
 package com.monkeyviewcontroller.snapthat;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.User;
@@ -37,6 +39,8 @@ public class MyFriendsFragment extends Fragment {
     private FriendListAdapter listAdapter;
     private TextView tvEmptyList;
     private ListView lvQueryResults;
+    private FloatingActionButton fab;
+    private Boolean[] selected;
 
     public static AddFriendsFragment newInstance() {
         AddFriendsFragment fragment = new AddFriendsFragment();
@@ -57,6 +61,8 @@ public class MyFriendsFragment extends Fragment {
         llEmptyList = (LinearLayout)rootView.findViewById(R.id.llEmptyList);
         lvQueryResults = (ListView)rootView.findViewById(R.id.lvQueryResults);
         tvEmptyList = (TextView)rootView.findViewById(R.id.tvEmptyList);
+        fab = (FloatingActionButton)rootView.findViewById(R.id.pink_icon);
+        fab.setVisibility(View.GONE);
 
         loadAllFriends();
 
@@ -64,18 +70,33 @@ public class MyFriendsFragment extends Fragment {
         lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Log.d("MVC", "checked item" + position);
+                                    int position, long id)
+            {
+                Log.d("MVC", "Checked item at position " + position);
 
                 CheckBox c = (CheckBox) view.findViewById(R.id.cbMyFriends);
 
                 if (c.isChecked()) {
                     c.setChecked(false);
-
                 } else {
                     c.setChecked(true);
-
                 }
+
+                selected[position] = c.isChecked();
+                fab.setVisibility(View.GONE);
+                for(boolean b: selected)
+                {
+                    if(b)
+                    {
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                }
+        }});
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MVC", "Clicked the button");
             }
         });
 
@@ -103,10 +124,12 @@ public class MyFriendsFragment extends Fragment {
                 listAdapter = new FriendListAdapter(getActivity(), friendRequest);
 
                 if (listAdapter.isEmpty()) {
-                    tvEmptyList.setText("No Pending Requests");
+                    tvEmptyList.setText("No Friends, Go Add Some!");
                     llEmptyList.setVisibility(View.VISIBLE);
                 } else {
                     lvQueryResults.setAdapter(listAdapter);
+                    selected = new Boolean[friendRequest.size()];
+                    Arrays.fill(selected, false);
                 }
             }
         });

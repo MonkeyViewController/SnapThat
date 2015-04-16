@@ -23,14 +23,14 @@
 
     <ImageButton
         android:id="@+id/ibtnSettings"
-        android:src="@android:drawable/ic_menu_manage"
+        android:src="@android:drawable/ic_menu_preferences"
         android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ImageButton
         android:id="@+id/ibtnRemoveFriend"
-        android:src="@android:drawable/ic_delete"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
         android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

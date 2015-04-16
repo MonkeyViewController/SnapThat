@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class FriendRequestListAdapter extends ArrayAdapter<FriendRequest> {
         TextView tvItemTextUsername = (TextView) view.findViewById(R.id.tvItemTextUsername);
         tvItemTextUsername.setText(friendRequests.get(position).getFriendOne());
 
-        Button btnAccept = (Button) view.findViewById(R.id.btnAccept);
+        ImageButton btnAccept = (ImageButton) view.findViewById(R.id.btnAccept);
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +47,7 @@ public class FriendRequestListAdapter extends ArrayAdapter<FriendRequest> {
             }
         });
 
-        Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
+        ImageButton btnCancel = (ImageButton) view.findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
