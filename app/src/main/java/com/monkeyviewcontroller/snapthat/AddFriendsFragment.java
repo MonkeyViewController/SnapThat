@@ -16,19 +16,26 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendRequestListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
+import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddFriendsFragment extends Fragment {
 
     private String currentUser;
+    private String currentObjectId;
 
     private Button btnAddFriendInvite;
     private EditText etAddFriendInvitee;
@@ -82,16 +89,14 @@ public class AddFriendsFragment extends Fragment {
     {
         showProgressDialog();
 
-        final ParseQuery<FriendRequest> friendRequests = ParseQuery.getQuery(FriendRequest.class);
-        friendRequests.whereEqualTo("friendTwo", currentUser);
-        friendRequests.whereEqualTo("status", 0);
-
-        friendRequests.findInBackground(new FindCallback<FriendRequest>() {
-            public void done(List<FriendRequest> friendRequest, ParseException exception) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("objectId",currentObjectId);
+        ParseCloud.callFunctionInBackground("getfriendrequests", params, new FunctionCallback<List<STUser>>() {
+            @Override
+            public void done(List<STUser> usersRequesting, com.parse.ParseException e) {
                 hideProgressDialog();
 
-
-                listAdapter = new FriendRequestListAdapter(getActivity(), friendRequest);
+                listAdapter = new FriendRequestListAdapter(getActivity(), usersRequesting, currentObjectId);
 
                 if (listAdapter.isEmpty()) {
                     tvEmptyList.setText("No Pending Requests");
@@ -145,27 +150,25 @@ public class AddFriendsFragment extends Fragment {
             pd.setMessage("Locating your bro, please wait.");
             pd.show();
 
-            FriendRequest fr = new FriendRequest();
-            fr.setFriendOne(currentUser);
-            fr.setFriendTwo(invitee);
-            fr.setStatus(0);
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("objectId", currentObjectId);
+            params.put("invitee", invitee);
 
-            //TODO: Parse cloud check if relation exists before allowing an add to the database
-            //TODO: Parse cloud check if relation exists before updating(cant override a status)
-
-            fr.saveEventually(new SaveCallback() {
+            ParseCloud.callFunctionInBackground("sendfriendrequest", params, new FunctionCallback<String>() {
                 @Override
-                public void done(ParseException e) {
+                public void done(String result, com.parse.ParseException e) {
                     pd.dismiss();
-
-                    if(e!=null) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    }else {
+                    if (e == null) {
+                        Log.d("MVC", result);
                         Toast.makeText(getActivity(), "An Invite has been sent", Toast.LENGTH_LONG).show();
                         etAddFriendInvitee.setText("");
                     }
-                }
-            });
+                    else
+                    {
+                        Log.d("MVC", e.toString());
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+            }});
         }
     }
 
@@ -173,5 +176,6 @@ public class AddFriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUser = getActivity().getIntent().getStringExtra("username");
+        currentObjectId = getActivity().getIntent().getStringExtra("objectId");
     }
 }

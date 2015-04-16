@@ -1,17 +1,13 @@
 package com.monkeyviewcontroller.snapthat.Models;
 
 import com.parse.ParseClassName;
-import com.parse.ParseObject;
+import com.parse.ParseUser;
 
-@ParseClassName("User")
-public class User extends ParseObject {
+@ParseClassName("_User")
+public class STUser extends ParseUser {
 
-    public User() {
+    public STUser() {
 
-    }
-
-    public String getObjectId() {
-        return getObjectId();
     }
 
     public String getUsername() {

@@ -15,22 +15,23 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.List;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
+import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.R;
 
-public class FriendListAdapter extends ArrayAdapter<FriendRequest> {
+public class FriendListAdapter extends ArrayAdapter<STUser> {
 
     Context context;
-    List<FriendRequest> friendRequests;
+    List<STUser> friends;
     private Boolean[] selected;
-    private String currentUser;
+    private String currentObjectId;
 
-    public FriendListAdapter(Context context, List<FriendRequest> objects, String currentUser) {
+    public FriendListAdapter(Context context, List<STUser> objects, String currentObjectId) {
         super(context, R.layout.list_item_friendrequest, objects);
         this.context = context;
-        this.friendRequests = objects;
-        this.currentUser = currentUser;
+        this.friends = objects;
+        this.currentObjectId = currentObjectId;
 
-        selected = new Boolean[this.friendRequests.size()];
+        selected = new Boolean[this.friends.size()];
         Arrays.fill(selected, false);
     }
 
@@ -40,11 +41,7 @@ public class FriendListAdapter extends ArrayAdapter<FriendRequest> {
         View view = inflater.inflate(R.layout.list_item_friend, parent, false);
 
         TextView tvItemTextUsername = (TextView) view.findViewById(R.id.tvItemTextUsername);
-
-        if(friendRequests.get(position).getFriendOne().equals(currentUser))
-            tvItemTextUsername.setText(friendRequests.get(position).getFriendTwo());
-        else
-            tvItemTextUsername.setText(friendRequests.get(position).getFriendOne());
+        tvItemTextUsername.setText(friends.get(position).getUsername());
 
         CheckBox cbMyFriends = (CheckBox)view.findViewById(R.id.cbMyFriends);
         cbMyFriends.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -75,12 +72,13 @@ public class FriendListAdapter extends ArrayAdapter<FriendRequest> {
             public void onClick(View v) {
 
                 //TODO: are you sure you want to remove this friend?
+                //TODO: delete friendRequest from DB
 
                 Log.d("MVC", "Clicking Remove friend.");
-                FriendRequest fr = friendRequests.get(position);
+                /*FriendRequest fr = friendRequests.get(position);
                 fr.deleteInBackground();
                 friendRequests.remove(fr);
-                notifyDataSetChanged();
+                notifyDataSetChanged();*/
             }
         });
         return view;

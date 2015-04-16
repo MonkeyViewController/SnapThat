@@ -12,17 +12,20 @@ import android.widget.TextView;
 
 import java.util.List;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
+import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.R;
 
-public class FriendRequestListAdapter extends ArrayAdapter<FriendRequest> {
+public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
 
     Context context;
-    List<FriendRequest> friendRequests;
+    List<STUser> usersRequesting;
+    String currentObjectId;
 
-    public FriendRequestListAdapter(Context context, List<FriendRequest> objects) {
+    public FriendRequestListAdapter(Context context, List<STUser> objects, String currentObjectId) {
         super(context, R.layout.list_item_friendrequest, objects);
         this.context = context;
-        this.friendRequests = objects;
+        this.currentObjectId = currentObjectId;
+        this.usersRequesting = objects;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class FriendRequestListAdapter extends ArrayAdapter<FriendRequest> {
         View view = inflater.inflate(R.layout.list_item_friendrequest, parent, false);
 
         TextView tvItemTextUsername = (TextView) view.findViewById(R.id.tvItemTextUsername);
-        tvItemTextUsername.setText(friendRequests.get(position).getFriendOne());
+        tvItemTextUsername.setText(usersRequesting.get(position).getUsername());
 
         ImageButton btnAccept = (ImageButton) view.findViewById(R.id.btnAccept);
         btnAccept.setOnClickListener(new View.OnClickListener() {
@@ -39,11 +42,12 @@ public class FriendRequestListAdapter extends ArrayAdapter<FriendRequest> {
             public void onClick(View v) {
 
                 Log.d("MVC", "Clicking Accept");
-                FriendRequest fr = friendRequests.get(position);
+                //TODO: Remove friendrequest from database
+                /*FriendRequest fr = friendRequests.get(position);
                 fr.put("status", 1);
                 fr.saveInBackground();
                 friendRequests.remove(fr);
-                notifyDataSetChanged();
+                notifyDataSetChanged();*/
             }
         });
 
@@ -53,10 +57,11 @@ public class FriendRequestListAdapter extends ArrayAdapter<FriendRequest> {
             public void onClick(View v) {
 
                 Log.d("MVC", "Clicking Cancel");
-                FriendRequest fr = friendRequests.get(position);
+                //TODO: Remove friendrequest from database
+                /*FriendRequest fr = friendRequests.get(position);
                 fr.deleteInBackground();
                 friendRequests.remove(fr);
-                notifyDataSetChanged();
+                notifyDataSetChanged();*/
             }
         });
         return view;

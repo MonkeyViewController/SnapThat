@@ -37,7 +37,7 @@ public class MainActivity extends FragmentActivity {
 
         setContentView(R.layout.activity_main);
 
-        Log.i("Test", "On Create .....");
+        Log.d("MVC", "On Create .....");
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());

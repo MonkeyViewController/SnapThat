@@ -21,19 +21,23 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
-import com.monkeyviewcontroller.snapthat.Models.User;
+import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class MyFriendsFragment extends Fragment {
 
     private String currentUser;
+    private String currentObjectId;
     private LinearLayout llProgressBar;
     private LinearLayout llEmptyList;
     private FriendListAdapter listAdapter;
@@ -41,7 +45,7 @@ public class MyFriendsFragment extends Fragment {
     private ListView lvQueryResults;
     private FloatingActionButton fab;
     private Boolean[] selected;
-    private List<FriendRequest> friends;
+    private List<STUser> friends;
 
     public static AddFriendsFragment newInstance() {
         AddFriendsFragment fragment = new AddFriendsFragment();
@@ -103,7 +107,7 @@ public class MyFriendsFragment extends Fragment {
                 {
                     if(selected[i])
                     {
-                        Log.d("MVC", "Selected : " + friends.get(i).getFriendOne() + " " + friends.get(i).getFriendTwo());
+                        Log.d("MVC", "Selected : " + friends.get(i).getUsername() + " " + friends.get(i).getObjectId());
                     }
                 }
             }
@@ -116,21 +120,14 @@ public class MyFriendsFragment extends Fragment {
     {
         showProgressDialog();
 
-        final ParseQuery<FriendRequest> friendRequestsOne = ParseQuery.getQuery(FriendRequest.class);
-        friendRequestsOne.whereEqualTo("friendTwo", currentUser);
-        friendRequestsOne.whereEqualTo("status", 1);
-
-        final ParseQuery<FriendRequest> friendRequestsTwo = ParseQuery.getQuery(FriendRequest.class);
-        friendRequestsTwo.whereEqualTo("friendOne", currentUser);
-        friendRequestsTwo.whereEqualTo("status", 1);
-
-        final ParseQuery<FriendRequest> combined = ParseQuery.or(Arrays.asList(friendRequestsOne, friendRequestsTwo));
-
-        combined.findInBackground(new FindCallback<FriendRequest>() {
-            public void done(List<FriendRequest> friendRequests, ParseException exception) {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("objectId",currentObjectId);
+        ParseCloud.callFunctionInBackground("getfriends", params, new FunctionCallback<List<STUser>>() {
+            @Override
+            public void done(List<STUser> users, com.parse.ParseException e) {
                 hideProgressDialog();
-                friends = friendRequests;
-                listAdapter = new FriendListAdapter(getActivity(), friends, currentUser);
+                friends = users;
+                listAdapter = new FriendListAdapter(getActivity(), friends, currentObjectId);
 
                 if (listAdapter.isEmpty()) {
                     tvEmptyList.setText("No Friends, Go Add Some!");
@@ -156,5 +153,6 @@ public class MyFriendsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUser = getActivity().getIntent().getStringExtra("username");
+        currentObjectId = getActivity().getIntent().getStringExtra("objectId");
     }
 }
