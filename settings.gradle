@@ -1,1 +1,1 @@
-include ':app', ':fab_library'
+include ':app'
