@@ -1,16 +1,13 @@
 package com.monkeyviewcontroller.snapthat;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 
 import com.monkeyviewcontroller.snapthat.dummy.DummyContent;
 
-public class PastGamesFragment extends ListFragment {
+public class NearbyGamesFragment extends ListFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,8 +21,8 @@ public class PastGamesFragment extends ListFragment {
     //private OnFragmentInteractionListener mListener;
 
     // TODO: Rename and change types of parameters
-    public static PastGamesFragment newInstance(String param1, String param2) {
-        PastGamesFragment fragment = new PastGamesFragment();
+    public static HistoryGamesFragment newInstance(String param1, String param2) {
+        HistoryGamesFragment fragment = new HistoryGamesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -37,7 +34,7 @@ public class PastGamesFragment extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PastGamesFragment() {
+    public NearbyGamesFragment() {
     }
 
     @Override
