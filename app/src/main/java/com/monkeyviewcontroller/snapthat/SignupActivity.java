@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -115,7 +116,7 @@ public class SignupActivity extends FragmentActivity {
             pd.setMessage("Signing up, please wait.");
             pd.show();
 
-            ParseUser user = new ParseUser();
+            STUser user = new STUser();
             user.setUsername(username);
             user.setEmail(email);
             user.setPassword(password);
