@@ -21,13 +21,16 @@ import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
+import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
+import com.parse.ParseACL;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.Arrays;
@@ -110,10 +113,38 @@ public class MyFriendsFragment extends Fragment {
                         Log.d("MVC", "Selected : " + friends.get(i).getUsername() + " " + friends.get(i).getObjectId());
                     }
                 }
+
+                //TODO: Get list of participating users to add to the new game.
+                //TODO: change/add a new field for list of participants
+                // Still deciding on Pointers to ParseUsers, or just dealing with OID strings
+                //Note:changing use of parse schema may require you to delete old tables in your account
+                registerNewGameWithParse("monkey", ParseUser.getCurrentUser(), false);
             }
         });
 
         return rootView;
+    }
+
+
+    private void registerNewGameWithParse(String searchTerm, ParseUser creator, boolean isGameFinished){
+        // 1
+        Game game = new Game();
+        game.setCreator(creator);
+        game.setSearchItem(searchTerm);
+        game.setGameFinished(isGameFinished);
+
+        // 2
+        ParseACL acl = new ParseACL();
+        acl.setPublicReadAccess(false);
+        game.setACL(acl);
+
+        // 3
+        game.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                //finish();
+            }
+        });
     }
 
     public void loadAllFriends()
