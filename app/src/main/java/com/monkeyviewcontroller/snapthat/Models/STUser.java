@@ -3,8 +3,10 @@ package com.monkeyviewcontroller.snapthat.Models;
 import com.parse.ParseClassName;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
+
 @ParseClassName("_User")
-public class STUser extends ParseUser {
+public class STUser extends ParseUser implements Serializable {
 
     public STUser() {
 

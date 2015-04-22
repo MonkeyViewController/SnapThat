@@ -34,6 +34,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -100,9 +101,13 @@ public class MyFriendsFragment extends Fragment {
                 }
         }});
 
+
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ArrayList<STUser> selectedFriends = new ArrayList<STUser>();
                 Log.d("MVC", "Clicked the FAB button");
 
                 for(int i=0; i < selected.length; i++)
@@ -110,6 +115,7 @@ public class MyFriendsFragment extends Fragment {
                     if(selected[i])
                     {
                         Log.d("MVC", "Selected : " + friends.get(i).getUsername() + " " + friends.get(i).getObjectId());
+                        selectedFriends.add(friends.get(i));
                     }
                 }
 
@@ -118,6 +124,11 @@ public class MyFriendsFragment extends Fragment {
                 // Still deciding on Pointers to ParseUsers, or just dealing with OID strings
                 //Note:changing use of parse schema may require you to delete old tables in your account
                 Intent intent = new Intent(getActivity(), CreateGameActivity.class);
+
+                //TODO: Test serializable bundling when friend requests work again
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("invitedUsersBundle", selectedFriends);
+                intent.putExtras(bundle);
                 startActivity(intent);
 
                 //registerNewGameWithParse("monkey", ParseUser.getCurrentUser(), false);
