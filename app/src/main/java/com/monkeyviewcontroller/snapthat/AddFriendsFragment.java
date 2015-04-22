@@ -26,6 +26,7 @@ import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.Arrays;
@@ -33,9 +34,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AddFriendsFragment extends Fragment {
-
-    private String currentUser;
-    private String currentObjectId;
 
     private Button btnAddFriendInvite;
     private EditText etAddFriendInvitee;
@@ -87,22 +85,28 @@ public class AddFriendsFragment extends Fragment {
 
     public void loadAllRequests()
     {
+        Log.d("MVC", "Loading all requests");
         showProgressDialog();
 
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("objectId",currentObjectId);
+        params.put("user", ParseUser.getCurrentUser().getObjectId());
         ParseCloud.callFunctionInBackground("getfriendrequests", params, new FunctionCallback<List<STUser>>() {
             @Override
             public void done(List<STUser> usersRequesting, com.parse.ParseException e) {
                 hideProgressDialog();
 
-                listAdapter = new FriendRequestListAdapter(getActivity(), usersRequesting, currentObjectId);
-
-                if (listAdapter.isEmpty()) {
-                    tvEmptyList.setText("No Pending Requests");
-                    llEmptyList.setVisibility(View.VISIBLE);
+                if(e!=null)
+                {
+                    Log.d("MVC", "load all requests error: " + e);
                 } else {
-                    lvQueryResults.setAdapter(listAdapter);
+                    listAdapter = new FriendRequestListAdapter(getActivity(), usersRequesting);
+
+                    if (listAdapter.isEmpty()) {
+                        tvEmptyList.setText("No Pending Requests");
+                        llEmptyList.setVisibility(View.VISIBLE);
+                    } else {
+                        lvQueryResults.setAdapter(listAdapter);
+                    }
                 }
             }
         });
@@ -133,7 +137,8 @@ public class AddFriendsFragment extends Fragment {
             cancel = true;
         }
 
-        if(invitee.equalsIgnoreCase(currentUser))
+        String username = ParseUser.getCurrentUser().getUsername();
+        if(invitee.equalsIgnoreCase(username))
         {
             etAddFriendInvitee.setError(getString(R.string.error_adding_yourself));
             focusView = etAddFriendInvitee;
@@ -143,7 +148,7 @@ public class AddFriendsFragment extends Fragment {
         if(cancel){
             focusView.requestFocus();
         }else {
-            Log.d("MVC", "Proceed to invite via parse, you are user:" + currentUser);
+            Log.d("MVC", "Proceed to invite via parse, you are user:" + username);
 
             final ProgressDialog pd = new ProgressDialog(this.getActivity());
             pd.setTitle("Please wait.");
@@ -151,7 +156,7 @@ public class AddFriendsFragment extends Fragment {
             pd.show();
 
             HashMap<String, Object> params = new HashMap<String, Object>();
-            params.put("objectId", currentObjectId);
+            params.put("user", ParseUser.getCurrentUser().getObjectId());
             params.put("invitee", invitee);
 
             ParseCloud.callFunctionInBackground("sendfriendrequest", params, new FunctionCallback<String>() {
@@ -175,7 +180,5 @@ public class AddFriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUser = getActivity().getIntent().getStringExtra("username");
-        currentObjectId = getActivity().getIntent().getStringExtra("objectId");
     }
 }

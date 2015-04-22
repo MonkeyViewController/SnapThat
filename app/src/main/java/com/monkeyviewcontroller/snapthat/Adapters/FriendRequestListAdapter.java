@@ -19,12 +19,10 @@ public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
 
     Context context;
     List<STUser> usersRequesting;
-    String currentObjectId;
 
-    public FriendRequestListAdapter(Context context, List<STUser> objects, String currentObjectId) {
+    public FriendRequestListAdapter(Context context, List<STUser> objects) {
         super(context, R.layout.list_item_friendrequest, objects);
         this.context = context;
-        this.currentObjectId = currentObjectId;
         this.usersRequesting = objects;
     }
 

@@ -23,13 +23,11 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
     Context context;
     List<STUser> friends;
     private Boolean[] selected;
-    private String currentObjectId;
 
-    public FriendListAdapter(Context context, List<STUser> objects, String currentObjectId) {
+    public FriendListAdapter(Context context, List<STUser> objects) {
         super(context, R.layout.list_item_friendrequest, objects);
         this.context = context;
         this.friends = objects;
-        this.currentObjectId = currentObjectId;
 
         selected = new Boolean[this.friends.size()];
         Arrays.fill(selected, false);

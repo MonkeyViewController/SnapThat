@@ -40,8 +40,6 @@ import java.util.List;
 
 public class MyFriendsFragment extends Fragment {
 
-    private String currentUser;
-    private String currentObjectId;
     private LinearLayout llProgressBar;
     private LinearLayout llEmptyList;
     private FriendListAdapter listAdapter;
@@ -156,21 +154,26 @@ public class MyFriendsFragment extends Fragment {
         showProgressDialog();
 
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("objectId",currentObjectId);
+        params.put("user",ParseUser.getCurrentUser().getObjectId());
         ParseCloud.callFunctionInBackground("getfriends", params, new FunctionCallback<List<STUser>>() {
             @Override
             public void done(List<STUser> users, com.parse.ParseException e) {
                 hideProgressDialog();
-                friends = users;
-                listAdapter = new FriendListAdapter(getActivity(), friends, currentObjectId);
 
-                if (listAdapter.isEmpty()) {
-                    tvEmptyList.setText("No Friends, Go Add Some!");
-                    llEmptyList.setVisibility(View.VISIBLE);
+                if(e!=null) {
+                    Log.d("MVC", "load all friends error: " + e);
                 } else {
-                    lvQueryResults.setAdapter(listAdapter);
-                    selected = new Boolean[friends.size()];
-                    Arrays.fill(selected, false);
+                    friends = users;
+                    listAdapter = new FriendListAdapter(getActivity(), friends);
+
+                    if (listAdapter.isEmpty()) {
+                        tvEmptyList.setText("No Friends, Go Add Some!");
+                        llEmptyList.setVisibility(View.VISIBLE);
+                    } else {
+                        lvQueryResults.setAdapter(listAdapter);
+                        selected = new Boolean[friends.size()];
+                        Arrays.fill(selected, false);
+                    }
                 }
             }
         });
@@ -187,7 +190,5 @@ public class MyFriendsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUser = getActivity().getIntent().getStringExtra("username");
-        currentObjectId = getActivity().getIntent().getStringExtra("objectId");
     }
 }

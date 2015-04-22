@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.parse.LogInCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class SignupOrLoginActivity extends Activity{
@@ -46,11 +49,21 @@ public class SignupOrLoginActivity extends Activity{
             @Override
             public void onClick(View v) {
                 Log.d("MVC", "Clicked button bypass");
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("username", "test");
-                intent.putExtra("objectId", "Ha3KsBJJeJ");
-                startActivity(intent);
+
+                ParseUser.logInInBackground("test", "asdfg",new LogInCallback() {
+                    @Override
+                    public void done(ParseUser parseUser, ParseException e) {
+
+                        if(e!=null) {
+                            Toast.makeText(SignupOrLoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        }else {
+                            Toast.makeText(SignupOrLoginActivity.this, ParseUser.getCurrentUser().getUsername(), Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(SignupOrLoginActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+                    }
+                });
             }
         });
     }
