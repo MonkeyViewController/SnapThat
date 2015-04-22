@@ -22,5 +22,6 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_adding_yourself">You can not add yourself</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_create_game">CreateGameActivity</string>
 
 </resources>

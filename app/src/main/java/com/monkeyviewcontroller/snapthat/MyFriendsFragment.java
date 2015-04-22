@@ -2,6 +2,7 @@ package com.monkeyviewcontroller.snapthat;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -118,7 +119,10 @@ public class MyFriendsFragment extends Fragment {
                 //TODO: change/add a new field for list of participants
                 // Still deciding on Pointers to ParseUsers, or just dealing with OID strings
                 //Note:changing use of parse schema may require you to delete old tables in your account
-                registerNewGameWithParse("monkey", ParseUser.getCurrentUser(), false);
+                Intent intent = new Intent(getActivity(), CreateGameActivity.class);
+                startActivity(intent);
+
+                //registerNewGameWithParse("monkey", ParseUser.getCurrentUser(), false);
             }
         });
 
