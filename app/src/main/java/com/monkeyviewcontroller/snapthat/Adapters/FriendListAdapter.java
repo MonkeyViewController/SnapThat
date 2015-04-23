@@ -13,10 +13,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.R;
+import com.parse.ParseCloud;
+import com.parse.ParseUser;
 
 public class FriendListAdapter extends ArrayAdapter<STUser> {
 
@@ -70,13 +73,14 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
             public void onClick(View v) {
 
                 //TODO: are you sure you want to remove this friend?
-                //TODO: delete friendRequest from DB
 
                 Log.d("MVC", "Clicking Remove friend.");
-                /*FriendRequest fr = friendRequests.get(position);
-                fr.deleteInBackground();
-                friendRequests.remove(fr);
-                notifyDataSetChanged();*/
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put("user", ParseUser.getCurrentUser().getObjectId());
+                params.put("friend", friends.get(position).getObjectId());
+                ParseCloud.callFunctionInBackground("removefriend", params);
+                friends.remove(position);
+                notifyDataSetChanged();
             }
         });
         return view;

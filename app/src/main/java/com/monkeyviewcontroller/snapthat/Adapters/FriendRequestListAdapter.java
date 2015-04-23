@@ -10,10 +10,15 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.R;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseUser;
 
 public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
 
@@ -40,12 +45,12 @@ public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
             public void onClick(View v) {
 
                 Log.d("MVC", "Clicking Accept");
-                //TODO: Remove friendrequest from database
-                /*FriendRequest fr = friendRequests.get(position);
-                fr.put("status", 1);
-                fr.saveInBackground();
-                friendRequests.remove(fr);
-                notifyDataSetChanged();*/
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put("user", ParseUser.getCurrentUser().getObjectId());
+                params.put("friend", usersRequesting.get(position).getObjectId());
+                ParseCloud.callFunctionInBackground("acceptfriend", params);
+                usersRequesting.remove(position);
+                notifyDataSetChanged();
             }
         });
 
@@ -55,11 +60,12 @@ public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
             public void onClick(View v) {
 
                 Log.d("MVC", "Clicking Cancel");
-                //TODO: Remove friendrequest from database
-                /*FriendRequest fr = friendRequests.get(position);
-                fr.deleteInBackground();
-                friendRequests.remove(fr);
-                notifyDataSetChanged();*/
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put("user", ParseUser.getCurrentUser().getObjectId());
+                params.put("friend", usersRequesting.get(position).getObjectId());
+                ParseCloud.callFunctionInBackground("declinefriend", params);
+                usersRequesting.remove(position);
+                notifyDataSetChanged();
             }
         });
         return view;

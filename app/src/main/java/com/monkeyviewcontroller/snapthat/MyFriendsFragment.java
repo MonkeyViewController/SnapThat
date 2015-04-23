@@ -172,7 +172,7 @@ public class MyFriendsFragment extends Fragment {
                 hideProgressDialog();
 
                 if(e!=null) {
-                    Log.d("MVC", "load all friends error: " + e);
+                    Log.d("MVC", "load all friends error: " + e + " " + e.getCause());
                 } else {
                     friends = users;
                     listAdapter = new FriendListAdapter(getActivity(), friends);

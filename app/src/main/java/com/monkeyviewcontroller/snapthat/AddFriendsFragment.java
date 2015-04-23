@@ -164,13 +164,15 @@ public class AddFriendsFragment extends Fragment {
                 public void done(String result, com.parse.ParseException e) {
                     pd.dismiss();
                     if (e == null) {
+                        Log.d("MVC", "success");
                         Log.d("MVC", result);
                         Toast.makeText(getActivity(), "An Invite has been sent", Toast.LENGTH_LONG).show();
                         etAddFriendInvitee.setText("");
                     }
                     else
                     {
-                        Log.d("MVC", e.toString());
+                        Log.d("MVC", "fail");
+                        Log.d("MVC", e.getMessage() + " " + e.getCause());
                         Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                     }
             }});
