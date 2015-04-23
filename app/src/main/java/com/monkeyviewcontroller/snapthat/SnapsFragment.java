@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 public class SnapsFragment extends Fragment {
@@ -27,8 +29,7 @@ public class SnapsFragment extends Fragment {
         return fragment;
     }
 
-    public SnapsFragment() {
-    }
+    public  SnapsFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,7 +41,11 @@ public class SnapsFragment extends Fragment {
         Camera.PictureCallback mPicture = setupImageCapture();
 
         setupCaptureButton(mPicture);
+        setupFriendsButton(mPicture);
+        setupGamesButton(mPicture);
+        setupActiveGamesButton(mPicture);
 
+        //TODO; front facing camera switcher
         return rootView;
     }
 
@@ -74,13 +79,51 @@ public class SnapsFragment extends Fragment {
     }
 
     private void setupCaptureButton(final Camera.PictureCallback mPicture){
-        Button captureButton = (Button) rootView.findViewById(R.id.capture_button);
+        ImageButton captureButton = (ImageButton) rootView.findViewById(R.id.capture_button);
 
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("Camera", "Capture Button Clicked");
                 mCamera.takePicture(null, null, mPicture);
+            }
+        });
+    }
+
+    private void setupFriendsButton(final Camera.PictureCallback mPicture){
+        ImageButton friendsButton = (ImageButton) rootView.findViewById(R.id.friends_button);
+
+        friendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("MVC", "Friends Button Clicked");
+                ViewPager vp = (ViewPager) getActivity().findViewById(R.id.pager);
+                vp.setCurrentItem(0, true);
+
+            }
+        });
+    }
+
+    private void setupGamesButton(final Camera.PictureCallback mPicture){
+        ImageButton gamesButton = (ImageButton) rootView.findViewById(R.id.games_button);
+
+        gamesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("MVC", "Games Button Clicked");
+                ViewPager vp = (ViewPager) getActivity().findViewById(R.id.pager);
+                vp.setCurrentItem(2, true);
+            }
+        });
+    }
+
+    private void setupActiveGamesButton(final Camera.PictureCallback mPicture){
+        ImageButton activeGamesButton = (ImageButton) rootView.findViewById(R.id.activegames_button);
+
+        activeGamesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("MVC", "Active Games Button Clicked");
             }
         });
     }
