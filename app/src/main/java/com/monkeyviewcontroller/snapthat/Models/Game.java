@@ -5,6 +5,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by isaacsiegel on 4/15/15.
  */
@@ -48,6 +51,7 @@ public class Game extends ParseObject {
         return ParseQuery.getQuery(Game.class);
     }
 
+    public  void setWinner(ParseUser winner) { put("winner", winner);}
 
-
+    public void setParticipants(ArrayList<STUser> participants) { put("participants", participants);}
 }

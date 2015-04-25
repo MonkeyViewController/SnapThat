@@ -1,39 +1,30 @@
 package com.monkeyviewcontroller.snapthat;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
-import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
-import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseACL;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -74,7 +65,7 @@ public class MyFriendsFragment extends Fragment {
 
         loadAllFriends();
 
-        //TODO: only show button when 1 item is selected, fade when scrolling, fix when it covers bottom row
+        //TODO: when clicking check box(Not the line), hide/show FAB
         lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view,
@@ -101,13 +92,10 @@ public class MyFriendsFragment extends Fragment {
                 }
         }});
 
-
-
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<STUser> selectedFriends = new ArrayList<STUser>();
+                ArrayList<STUser.Model> selectedFriends = new ArrayList<>();
                 Log.d("MVC", "Clicked the FAB button");
 
                 for(int i=0; i < selected.length; i++)
@@ -115,49 +103,17 @@ public class MyFriendsFragment extends Fragment {
                     if(selected[i])
                     {
                         Log.d("MVC", "Selected : " + friends.get(i).getUsername() + " " + friends.get(i).getObjectId());
-                        selectedFriends.add(friends.get(i));
+                        selectedFriends.add(friends.get(i).getModel());
                     }
                 }
 
-                //TODO: Get list of participating users to add to the new game.
-                //TODO: change/add a new field for list of participants
-                // Still deciding on Pointers to ParseUsers, or just dealing with OID strings
-                //Note:changing use of parse schema may require you to delete old tables in your account
                 Intent intent = new Intent(getActivity(), CreateGameActivity.class);
-
-                //TODO: Test serializable bundling when friend requests work again
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("invitedUsersBundle", selectedFriends);
-                intent.putExtras(bundle);
+                intent.putExtra("friendsingame", selectedFriends);
                 startActivity(intent);
-
-                //registerNewGameWithParse("monkey", ParseUser.getCurrentUser(), false);
             }
         });
 
         return rootView;
-    }
-
-
-    private void registerNewGameWithParse(String searchTerm, ParseUser creator, boolean isGameFinished){
-        // 1
-        Game game = new Game();
-        game.setCreator(creator);
-        game.setSearchItem(searchTerm);
-        game.setGameFinished(isGameFinished);
-
-        // 2
-        ParseACL acl = new ParseACL();
-        acl.setPublicReadAccess(false);
-        game.setACL(acl);
-
-        // 3
-        game.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                //finish();
-            }
-        });
     }
 
     public void loadAllFriends()

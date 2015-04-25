@@ -39,9 +39,10 @@
 
 
     <Button
+        android:id="@+id/btnBeginGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Begin Game"
+        android:text="Let's Play!"
         android:gravity="center"
     />
 

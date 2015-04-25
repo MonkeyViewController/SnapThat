@@ -37,6 +37,13 @@ public class SignupActivity extends FragmentActivity {
         etSignupEmail = (EditText) findViewById(R.id.etSignupEmail);
         etSignupPassword = (EditText) findViewById(R.id.etSignupPassword);
         etSignupBirthday = (EditText) findViewById(R.id.etSignupBirthday);
+        etSignupBirthday.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Log.d("MVC", "Clicked edit text to select birthday");
+                showDatePickerDialog(v);
+            }
+        });
 
         btnSignupBirthday = (Button)findViewById(R.id.btnSignupBirthday);
         btnSignupBirthday.setOnClickListener(new View.OnClickListener(){
