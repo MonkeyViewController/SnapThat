@@ -28,7 +28,7 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
     private Boolean[] selected;
 
     public FriendListAdapter(Context context, List<STUser> objects) {
-        super(context, R.layout.list_item_friendrequest, objects);
+        super(context, R.layout.list_item_friend, objects);
         this.context = context;
         this.friends = objects;
 

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.Game;
@@ -33,22 +34,19 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public class CurrentGamesFragment extends Fragment {
 
-    private String currentUser;
-    private String currentObjectId;
     private LinearLayout llProgressBar;
     private LinearLayout llEmptyList;
-    private FriendListAdapter listAdapter;
+    private CurrentGameListAdapter listAdapter;
     private TextView tvEmptyList;
     private ListView lvQueryResults;
-    private FloatingActionButton fab;
-    private Boolean[] selected;
-    private List<STUser> friends;
+    private List<Game> currentGames;
 
     public static CurrentGamesFragment newInstance() {
         CurrentGamesFragment fragment = new CurrentGamesFragment();
@@ -91,27 +89,31 @@ public class CurrentGamesFragment extends Fragment {
         showProgressDialog();
 
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("objectId",currentObjectId);
+        params.put("user",ParseUser.getCurrentUser().getObjectId());
 
-        //TODO: Actually implement this on the cloud
-        /*
-        ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<STUser>>() {
+        ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<Game>>() {
             @Override
-            public void done(List<STUser> users, com.parse.ParseException e) {
+            public void done(List<Game> games, com.parse.ParseException e) {
                 hideProgressDialog();
-                friends = users;
-                listAdapter = new FriendListAdapter(getActivity(), friends, currentObjectId);
 
-                if (listAdapter.isEmpty()) {
-                    tvEmptyList.setText("No Friends, Go Add Some!");
-                    llEmptyList.setVisibility(View.VISIBLE);
-                } else {
-                    lvQueryResults.setAdapter(listAdapter);
-                    selected = new Boolean[friends.size()];
-                    Arrays.fill(selected, false);
+                if(e!=null) {
+                    Log.d("MVC", "get current games error: " + e + " " + e.getCause());
+                }
+                else {
+                    Log.d("MVC", "got the current games");
+                    currentGames = games;
+                    listAdapter = new CurrentGameListAdapter(getActivity(), games);
+
+                    if (listAdapter.isEmpty()) {
+                        //TODO: add a button that when clicked moves to the friends fragment
+                        tvEmptyList.setText("No Active Games, create one!");
+                        llEmptyList.setVisibility(View.VISIBLE);
+                    } else {
+                        lvQueryResults.setAdapter(listAdapter);
+                    }
                 }
             }
-        });*/
+        });
     }
 
     private void showProgressDialog() {
@@ -125,7 +127,5 @@ public class CurrentGamesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUser = getActivity().getIntent().getStringExtra("username");
-        currentObjectId = getActivity().getIntent().getStringExtra("objectId");
     }
 }

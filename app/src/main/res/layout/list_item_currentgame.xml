@@ -6,7 +6,7 @@
     android:descendantFocusability="blocksDescendants">
 
     <TextView
-        android:id="@+id/tvItemTextGameTerm"
+        android:id="@+id/tvItemTerm"
         android:paddingLeft="10dp"
         android:focusable="false"
         android:textIsSelectable="false"
@@ -15,9 +15,28 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"/>
 
+    <TextView
+        android:id="@+id/tvItemCreator"
+        android:paddingLeft="10dp"
+        android:focusable="false"
+        android:textIsSelectable="false"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
+
+    <TextView
+        android:id="@+id/tvItemDate"
+        android:paddingLeft="10dp"
+        android:focusable="false"
+        android:textIsSelectable="false"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"/>
 
     <ImageButton
-        android:id="@+id/ibtnRemoveFriend"
+        android:id="@+id/ibtnGoToSnap"
         android:src="@android:drawable/ic_media_play"
         android:focusable="false"
         android:layout_width="wrap_content"

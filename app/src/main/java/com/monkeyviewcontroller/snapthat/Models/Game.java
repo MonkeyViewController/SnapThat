@@ -6,6 +6,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +43,9 @@ public class Game extends ParseObject {
 //    public JSONArray getParticipants(){
 //        return getJSONArray("participantIDs");
 //    }
+    public String getCreatorUsername() { return getParseUser("creator").getUsername(); }
+
+    public Date getCreatedDate() { return getCreatedAt(); }
 
     public void setCreator(ParseUser value) {
         put("creator", value);
