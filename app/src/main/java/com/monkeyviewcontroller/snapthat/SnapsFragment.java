@@ -18,6 +18,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
+import com.monkeyviewcontroller.snapthat.Models.Game;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseUser;
+
+import java.util.HashMap;
+import java.util.List;
+
 public class SnapsFragment extends Fragment {
 
     private Camera mCamera;
@@ -124,6 +133,26 @@ public class SnapsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.i("MVC", "Active Games Button Clicked");
+
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put("user", ParseUser.getCurrentUser().getObjectId());
+
+                ParseCloud.callFunctionInBackground("getcurrentgamesterms", params, new FunctionCallback<List<String>>() {
+                    @Override
+                    public void done(List<String> terms, com.parse.ParseException e) {
+
+                        if (e != null) {
+                            Log.d("MVC", "get current games terms error: " + e + " " + e.getCause());
+                        } else {
+                            Log.d("MVC", "got the current games terms");
+
+                            for(String s: terms)
+                            {
+                                Log.d("MVC", "Terms: " + s);
+                            }
+                        }
+                    }
+                });
             }
         });
     }
