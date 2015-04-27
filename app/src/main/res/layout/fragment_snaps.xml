@@ -25,11 +25,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="20"
                 >
-                <ImageView
-                    android:layout_width="500sp"
-                    android:layout_height="500sp"
-                    android:layout_gravity="bottom"
-                    android:id="@+id/imageViewOfPicture"/>
 
             </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.monkeyviewcontroller.snapthat;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,7 +37,7 @@ import java.util.List;
 
 public class AddFriendsFragment extends Fragment {
 
-    private Button btnAddFriendInvite;
+    private ImageButton btnAddFriendInvite;
     private EditText etAddFriendInvitee;
     private LinearLayout llProgressBar;
     private LinearLayout llEmptyList;
@@ -63,7 +65,8 @@ public class AddFriendsFragment extends Fragment {
         lvQueryResults = (ListView)rootView.findViewById(R.id.lvQueryResults);
         tvEmptyList = (TextView)rootView.findViewById(R.id.tvEmptyList);
         etAddFriendInvitee = (EditText)rootView.findViewById(R.id.etAddFriendsInvitee);
-        btnAddFriendInvite = (Button)rootView.findViewById(R.id.btnAddFriendsInvite);
+        btnAddFriendInvite = (ImageButton)rootView.findViewById(R.id.btnAddFriendsInvite);
+        setViewBackgroundWithoutResettingPadding(btnAddFriendInvite);
         btnAddFriendInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +84,13 @@ public class AddFriendsFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public static void setViewBackgroundWithoutResettingPadding(final View v) {
+        final int paddingBottom = v.getPaddingBottom(), paddingLeft = v.getPaddingLeft();
+        final int paddingRight = v.getPaddingRight(), paddingTop = v.getPaddingTop();
+        v.setBackgroundColor(Color.TRANSPARENT);
+        v.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
     }
 
     public void loadAllRequests()

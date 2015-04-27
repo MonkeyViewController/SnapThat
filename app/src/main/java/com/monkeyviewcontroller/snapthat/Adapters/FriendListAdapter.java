@@ -1,6 +1,7 @@
 package com.monkeyviewcontroller.snapthat.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.R;
@@ -26,11 +29,13 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
     Context context;
     List<STUser> friends;
     private Boolean[] selected;
+    private FloatingActionButton fab;
 
-    public FriendListAdapter(Context context, List<STUser> objects) {
+    public FriendListAdapter(Context context, List<STUser> objects, FloatingActionButton fab) {
         super(context, R.layout.list_item_friend, objects);
         this.context = context;
         this.friends = objects;
+        this.fab = fab;
 
         selected = new Boolean[this.friends.size()];
         Arrays.fill(selected, false);
@@ -50,12 +55,21 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 selected[position] = isChecked;
+                fab.setVisibility(View.GONE);
+                for(boolean b: selected)
+                {
+                    if(b)
+                    {
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                }
             }
         });
 
         cbMyFriends.setChecked(selected[position]);
 
         ImageButton btnSettings = (ImageButton) view.findViewById(R.id.ibtnSettings);
+        setViewBackgroundWithoutResettingPadding(btnSettings);
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +81,10 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
             }
         });
 
+
+
         ImageButton btnRemoveFriend = (ImageButton) view.findViewById(R.id.ibtnRemoveFriend);
+        setViewBackgroundWithoutResettingPadding(btnRemoveFriend);
         btnRemoveFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,4 +103,10 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
         return view;
     }
 
+    public static void setViewBackgroundWithoutResettingPadding(final View v) {
+        final int paddingBottom = v.getPaddingBottom(), paddingLeft = v.getPaddingLeft();
+        final int paddingRight = v.getPaddingRight(), paddingTop = v.getPaddingTop();
+        v.setBackgroundColor(Color.TRANSPARENT);
+        v.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+    }
 }

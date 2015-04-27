@@ -29,11 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnAddFriendsInvite"
-            android:text="+"
+            android:src="@drawable/ic_add_black_36dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
     </LinearLayout>
 
     <TextView

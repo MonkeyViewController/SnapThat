@@ -24,6 +24,11 @@ import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseUser;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -62,25 +67,22 @@ public class SnapsFragment extends Fragment {
         final Camera.PictureCallback mPicture = new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-                Log.d("Camera","Byte array created");
+                Log.d("MVC","Byte array created");
 
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90);
+                File outputDir = getActivity().getCacheDir(); // context being the Activity pointer
+                try {
+                    File outputFile = new File(outputDir, "photopreview.tmp");
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(outputFile));
+                    bos.write(data);
+                    bos.flush();
+                    bos.close();
+                    Log.d("MVC","Byte array written to cache file, size: " + outputFile.length() + outputFile.getAbsolutePath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-                // Use matrix to rotate bitmap image
-                // to compensate for 90 manual rotation in preview workaround
-                Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-
-                //TEMP: Set ImageView ontop of preview to display image
-                ImageView iv = (ImageView) rootView.findViewById(R.id.imageViewOfPicture);
-                iv.setImageBitmap(rotatedBitmap);
-
-                //String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
-                //Log.i("img",encodedImage);
-
-                //TODO: Transmit photo data to server/parse
+                Intent intent = new Intent(getActivity(), PhotoPreviewActivity.class);
+                startActivity(intent);
             }
         };
 

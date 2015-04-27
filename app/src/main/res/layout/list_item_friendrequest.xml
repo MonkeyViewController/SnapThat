@@ -16,14 +16,14 @@
 
     <ImageButton
         android:id="@+id/btnAccept"
-        android:src="@android:drawable/ic_menu_add"
+        android:src="@drawable/ic_done_black_36dp"
         android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ImageButton
         android:id="@+id/btnCancel"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:src="@drawable/ic_clear_black_36dp"
         android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

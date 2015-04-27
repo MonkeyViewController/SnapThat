@@ -131,7 +131,7 @@ public class MyFriendsFragment extends Fragment {
                     Log.d("MVC", "load all friends error: " + e + " " + e.getCause());
                 } else {
                     friends = users;
-                    listAdapter = new FriendListAdapter(getActivity(), friends);
+                    listAdapter = new FriendListAdapter(getActivity(), friends, fab);
 
                     if (listAdapter.isEmpty()) {
                         tvEmptyList.setText("No Friends, Go Add Some!");

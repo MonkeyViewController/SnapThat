@@ -45,6 +45,10 @@
             android:name=".CreateGameActivity"
             android:label="@string/title_activity_create_game" >
         </activity>
+        <activity
+            android:name=".PhotoPreviewActivity"
+            android:label="@string/title_activity_photo_preview" >
+        </activity>
     </application>
 
 </manifest>

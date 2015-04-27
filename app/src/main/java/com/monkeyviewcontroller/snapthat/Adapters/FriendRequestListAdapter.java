@@ -1,6 +1,7 @@
 package com.monkeyviewcontroller.snapthat.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
         tvItemTextUsername.setText(usersRequesting.get(position).getUsername());
 
         ImageButton btnAccept = (ImageButton) view.findViewById(R.id.btnAccept);
+        setViewBackgroundWithoutResettingPadding(btnAccept);
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +57,7 @@ public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
         });
 
         ImageButton btnCancel = (ImageButton) view.findViewById(R.id.btnCancel);
+        setViewBackgroundWithoutResettingPadding(btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +72,13 @@ public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
             }
         });
         return view;
+    }
+
+    public static void setViewBackgroundWithoutResettingPadding(final View v) {
+        final int paddingBottom = v.getPaddingBottom(), paddingLeft = v.getPaddingLeft();
+        final int paddingRight = v.getPaddingRight(), paddingTop = v.getPaddingTop();
+        v.setBackgroundColor(Color.TRANSPARENT);
+        v.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
     }
 
 }
