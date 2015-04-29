@@ -1,6 +1,7 @@
 package com.monkeyviewcontroller.snapthat;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.monkeyviewcontroller.snapthat.Models.STUser;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 public class PhotoPreviewActivity extends Activity {
 
     private ImageView photoImageView;
+    private ImageButton cancelSubmissionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,18 @@ public class PhotoPreviewActivity extends Activity {
 
         photoImageView = (ImageView) findViewById(R.id.photoImageView);
         setPhotoToView();
+
+
+        cancelSubmissionButton = (ImageButton) findViewById(R.id.cancelSubmissionButton);
+        cancelSubmissionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("MVC","Cancel Clicked");
+                //Close PhotoPreviewActivity and return to primary view
+                finish();
+            }
+        });
+
     }
 
     private void setPhotoToView() {
