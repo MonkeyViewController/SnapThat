@@ -95,7 +95,7 @@ public class SnapsFragment extends Fragment {
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("Camera", "Capture Button Clicked");
+                Log.d("Camera", "Capture Button Clicked");
                 mCamera.takePicture(null, null, mPicture);
             }
         });
@@ -107,7 +107,7 @@ public class SnapsFragment extends Fragment {
         friendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("MVC", "Friends Button Clicked");
+                Log.d("MVC", "Friends Button Clicked");
                 ViewPager vp = (ViewPager) getActivity().findViewById(R.id.pager);
                 vp.setCurrentItem(0, true);
 
@@ -121,7 +121,7 @@ public class SnapsFragment extends Fragment {
         gamesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("MVC", "Games Button Clicked");
+                Log.d("MVC", "Games Button Clicked");
                 ViewPager vp = (ViewPager) getActivity().findViewById(R.id.pager);
                 vp.setCurrentItem(2, true);
             }
@@ -134,7 +134,7 @@ public class SnapsFragment extends Fragment {
         activeGamesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("MVC", "Active Games Button Clicked");
+                Log.d("MVC", "Active Games Button Clicked");
 
                 HashMap<String, Object> params = new HashMap<String, Object>();
                 params.put("user", ParseUser.getCurrentUser().getObjectId());

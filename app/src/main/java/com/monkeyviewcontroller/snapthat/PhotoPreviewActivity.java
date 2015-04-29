@@ -2,9 +2,11 @@ package com.monkeyviewcontroller.snapthat;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.Image;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ public class PhotoPreviewActivity extends Activity {
 
     private ImageView photoImageView;
     private ImageButton cancelSubmissionButton;
+    private ImageButton previewConfirmButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +42,22 @@ public class PhotoPreviewActivity extends Activity {
         photoImageView = (ImageView) findViewById(R.id.photoImageView);
         setPhotoToView();
 
+        previewConfirmButton = (ImageButton) findViewById(R.id.previewConfirmButton);
+        previewConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("MVC","Confirm Clicked");
+
+                Intent intent = new Intent(PhotoPreviewActivity.this, GameSelectionActivity.class);
+                startActivity(intent);
+            }
+        });
 
         cancelSubmissionButton = (ImageButton) findViewById(R.id.cancelSubmissionButton);
         cancelSubmissionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("MVC","Cancel Clicked");
+                Log.d("MVC","Cancel Clicked");
                 //Close PhotoPreviewActivity and return to primary view
                 finish();
             }

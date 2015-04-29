@@ -65,7 +65,6 @@ public class MyFriendsFragment extends Fragment {
 
         loadAllFriends();
 
-        //TODO: when clicking check box(Not the line), hide/show FAB
         lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view,

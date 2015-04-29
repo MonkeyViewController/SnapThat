@@ -24,5 +24,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_create_game">CreateGameActivity</string>
     <string name="title_activity_photo_preview">PhotoPreviewActivity</string>
+    <string name="title_activity_game_selection">GameSelectionActivity</string>
 
 </resources>
