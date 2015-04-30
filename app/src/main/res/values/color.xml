@@ -8,6 +8,7 @@
     <color name="gray">#808080</color>
     <color name="gray_shadow">#838383</color>
     <color name="gray_shadow_lite">#B8B8B8</color>
+    <color name="black_transparent">#CC000000</color>
 
     <color name="not_background">#E6FF0000</color>
     <color name="not_highlight">#E6FFFFFF</color>

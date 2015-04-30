@@ -4,81 +4,67 @@
     android:layout_height="match_parent">
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent">
 
-        >
         <FrameLayout
             android:id="@+id/camera_preview"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         </FrameLayout>
 
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="20"
-                >
-
-            </LinearLayout>
+            android:layout_height="match_parent" >
 
             <ImageButton
-                android:id = "@+id/activegames_button"
-                android:layout_width = "wrap_content"
-                android:layout_height = "wrap_content"
-                android:src="@drawable/abc_ic_menu_copy_mtrl_am_alpha"
-                android:background="@color/red"
+                android:id="@+id/games_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="20dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:background="@drawable/circle_button"
                 />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="80"
-                android:layout_gravity="center"
->
+            <ImageButton
+                android:id="@+id/friends_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:background="@drawable/circle_button"
+                />
 
-                <ImageButton
-                    android:id = "@+id/friends_button"
-                    android:layout_width = "match_parent"
-                    android:layout_height = "wrap_content"
-                    android:layout_weight="33"
-                    android:background="@color/ics_blue"
-                    android:src="@drawable/abc_ic_menu_copy_mtrl_am_alpha"
-                    android:layout_gravity="center_vertical"
-                    />
+            <ImageButton
+                android:id="@+id/capture_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:src="@android:drawable/ic_menu_camera"
+                android:background="@drawable/red_circle_button"
+                />
 
-                <ImageButton
-                    android:id = "@+id/capture_button"
-                    android:layout_weight="33"
-                    android:layout_width = "match_parent"
-                    android:layout_height = "wrap_content"
-                    android:src="@android:drawable/ic_menu_camera"
-                    android:layout_gravity="center_vertical"
+            <ImageButton
+                android:id="@+id/activegames_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/games_button"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentRight="true"
+                android:src="@android:drawable/ic_menu_camera"
+                android:background="@drawable/circle_button"
+                />
 
-                    />
-
-                <ImageButton
-                    android:id = "@+id/games_button"
-                    android:layout_width = "match_parent"
-                    android:layout_weight="33"
-                    android:layout_height = "wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/swarm_orange"
-                    android:src="@drawable/abc_ic_menu_copy_mtrl_am_alpha"
-                    />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-
-
+        </RelativeLayout>
 
     </FrameLayout>
 

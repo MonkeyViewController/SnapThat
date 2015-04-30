@@ -19,7 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
+import com.monkeyviewcontroller.snapthat.Adapters.PastGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
@@ -41,10 +43,10 @@ public class HistoryGamesFragment extends Fragment {
 
     private LinearLayout llProgressBar;
     private LinearLayout llEmptyList;
-    private FriendListAdapter listAdapter;
+    private PastGameListAdapter listAdapter;
     private TextView tvEmptyList;
     private ListView lvQueryResults;
-    private Boolean[] selected;
+    private List<Game> pastGames;
 
     public static HistoryGamesFragment newInstance() {
         HistoryGamesFragment fragment = new HistoryGamesFragment();
@@ -87,24 +89,32 @@ public class HistoryGamesFragment extends Fragment {
         showProgressDialog();
 
         //TODO: Actually implement this on the cloud
-        /*
-        ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<STUser>>() {
-            @Override
-            public void done(List<STUser> users, com.parse.ParseException e) {
-                hideProgressDialog();
-                friends = users;
-                listAdapter = new FriendListAdapter(getActivity(), friends, currentObjectId);
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user",ParseUser.getCurrentUser().getObjectId());
 
-                if (listAdapter.isEmpty()) {
-                    tvEmptyList.setText("No Friends, Go Add Some!");
-                    llEmptyList.setVisibility(View.VISIBLE);
-                } else {
-                    lvQueryResults.setAdapter(listAdapter);
-                    selected = new Boolean[friends.size()];
-                    Arrays.fill(selected, false);
+        ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<Game>>() {
+            @Override
+            public void done(List<Game> games, com.parse.ParseException e) {
+                hideProgressDialog();
+
+                if(e!=null) {
+                    Log.d("MVC", "get current games error: " + e + " " + e.getCause());
+                }
+                else {
+                    Log.d("MVC", "got the current games");
+                    pastGames = games;
+                    listAdapter = new PastGameListAdapter(getActivity(), games);
+
+                    if (listAdapter.isEmpty()) {
+                        //TODO: add a button that when clicked moves to the current games fragment
+                        tvEmptyList.setText("No Games Are Finished!");
+                        llEmptyList.setVisibility(View.VISIBLE);
+                    } else {
+                        lvQueryResults.setAdapter(listAdapter);
+                    }
                 }
             }
-        });*/
+        });
     }
 
     private void showProgressDialog() {

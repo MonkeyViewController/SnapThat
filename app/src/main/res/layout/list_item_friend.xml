@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="48dp"
     android:descendantFocusability="blocksDescendants">
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cbMyFriends"
-        android:layout_gravity="center_vertical"/>
+        android:layout_marginLeft="16dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"/>
 
     <TextView
+        android:layout_marginLeft="72dp"
         android:id="@+id/tvItemTextUsername"
-        android:paddingLeft="10dp"
         android:focusable="false"
         android:textIsSelectable="false"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"/>
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"/>
 
     <ImageButton
         android:id="@+id/ibtnSettings"
         android:src="@drawable/ic_settings_black_24dp"
         android:focusable="false"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="34dp"/>
 
     <ImageButton
         android:id="@+id/ibtnRemoveFriend"
         android:src="@drawable/ic_clear_black_24dp"
         android:focusable="false"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"/>
 
-</LinearLayout>
+</RelativeLayout>
