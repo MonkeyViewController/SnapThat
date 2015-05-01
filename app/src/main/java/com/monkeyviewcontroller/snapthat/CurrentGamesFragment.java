@@ -102,6 +102,7 @@ public class CurrentGamesFragment extends Fragment {
                 else {
                     Log.d("MVC", "got the current games");
                     currentGames = games;
+                    ((MainActivity)getActivity()).setCurrentGames(games);
                     listAdapter = new CurrentGameListAdapter(getActivity(), games);
 
                     if (listAdapter.isEmpty()) {

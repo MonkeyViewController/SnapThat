@@ -13,10 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Game;
@@ -29,18 +31,31 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class SnapsFragment extends Fragment {
 
+    private Spinner termsSpinner;
     private Camera mCamera;
     private CameraPreview mPreview;
     private View rootView;
+    private  List<Game> games;
 
     public static SnapsFragment newInstance() {
         SnapsFragment fragment = new SnapsFragment();
         return fragment;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            //Wait until snapsFragment is visible, then build the Spinner
+            //Game data has already been downloaded
+            setupTermsDropdown();
+        }
     }
 
     public  SnapsFragment(){}
@@ -59,8 +74,31 @@ public class SnapsFragment extends Fragment {
         setupGamesButton(mPicture);
         setupActiveGamesButton(mPicture);
 
+
         //TODO; front facing camera switcher
         return rootView;
+    }
+
+    private void setupTermsDropdown(){
+        termsSpinner = (Spinner) rootView.findViewById(R.id.termsSpinner);
+        List<String> list = new ArrayList<>();
+
+        games = ((MainActivity)getActivity()).getCurrentGames();
+
+        for (Game g: games){
+            list.add(g.getSearchItem());
+        }
+
+        Log.i("DEBUG", getActivity().toString());
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        termsSpinner.setAdapter(dataAdapter);
     }
 
     private Camera.PictureCallback setupImageCapture(){
@@ -81,7 +119,15 @@ public class SnapsFragment extends Fragment {
                     e.printStackTrace();
                 }
 
+                int selectedTermIndex = termsSpinner.getSelectedItemPosition();
+
+                //TODO: save and transmit oid of selected game to the preview
+                String selectedGameOID = games.get(selectedTermIndex).getObjectId();
+
+
                 Intent intent = new Intent(getActivity(), PhotoPreviewActivity.class);
+                //Store selectedGameOID so that we can save to parse in the PhotoPreviewActivity
+                intent.putExtra("selectedGameOID",selectedGameOID);
                 startActivity(intent);
             }
         };
@@ -96,6 +142,7 @@ public class SnapsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("Camera", "Capture Button Clicked");
+
                 mCamera.takePicture(null, null, mPicture);
             }
         });
@@ -203,109 +250,4 @@ public class SnapsFragment extends Fragment {
         safeCameraOpenInView(rootView);
     }
 
-    /*
-    public void cameraSetup(){
-
-
-        // Create an instance of Camera
-        mCamera = getCameraInstance();
-
-        // Create our Preview view and set it as the content of our activity.
-        mPreview = new CameraPreview(this, mCamera);
-
-
-        //Sets context so that FrameLayout preview can find camera_preview
-        setContentView(R.layout.fragment_snaps);
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        if(preview != null){
-            Log.d("Camera", "Preview instantiated");
-        }
-
-
-
-        //ERROR: NEXT LINE CAUSES APP CRASH
-        preview.addView(mPreview);
-
-        if(preview != null){
-            Log.d("Camera", "Preview instantiated");
-        }
-
-        //Prep for taking a pic
-        final Camera.PictureCallback mPicture = new Camera.PictureCallback() {
-            @Override
-            public void onPictureTaken(byte[] data, Camera camera) {
-                Log.d("Camera","Byte array created");
-
-                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                //Transmit Photo as byte[] or bitmap here
-            }
-        };
-
-        Button bttn = (Button) findViewById(R.id.capture_button);
-
-        bttn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCamera.takePicture(null, null, mPicture);
-
-            }
-        });
-
-    }
-
-
-
-    private void releaseCamera(){
-        if (mCamera != null){
-            mCamera.release();        // release the camera for other applications
-            mCamera = null;
-            mPreview.getHolder().removeCallback(mPreview);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        try
-        {
-            // release the camera immediately on pause event
-            //releaseCamera();
-            mCamera.stopPreview();
-            mCamera.setPreviewCallback(null);
-            mCamera.release();
-            mCamera = null;
-
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        Log.i("Test", "On Resume .....");
-
-        try
-        {
-            mCamera = getCameraInstance();
-            mCamera.setPreviewCallback(null);
-            mPreview =  new CameraPreview(this, mCamera);
-            FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-            preview.addView(mPreview);
-
-        } catch (Exception e){
-            Log.d("Camera", "Error starting camera preview: " + e.getMessage());
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.i("Test", "On Start .....");
-
-    }
-    */
-}
+   }

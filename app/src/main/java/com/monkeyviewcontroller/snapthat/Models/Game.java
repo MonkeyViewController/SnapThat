@@ -58,4 +58,5 @@ public class Game extends ParseObject {
     public  void setWinner(ParseUser winner) { put("winner", winner);}
 
     public void setParticipants(ArrayList<STUser> participants) { put("participants", participants);}
+
 }
