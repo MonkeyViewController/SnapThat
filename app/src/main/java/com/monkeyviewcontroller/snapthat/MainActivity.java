@@ -1,5 +1,7 @@
 package com.monkeyviewcontroller.snapthat;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -25,14 +27,59 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
+import com.monkeyviewcontroller.snapthat.Models.Game;
+import com.parse.FunctionCallback;
+import com.parse.ParseCloud;
+import com.parse.ParseUser;
+
 public class MainActivity extends FragmentActivity {
 
     SectionsPagerAdapter mSectionsPagerAdapter;
 
     ViewPager mViewPager;
 
+    List<Game> currentGames;
+
+    public List<Game> getCurrentGames(){
+        if (currentGames == null){
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("user", ParseUser.getCurrentUser().getObjectId());
+
+            ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<Game>>() {
+                @Override
+                public void done(List<Game> games, com.parse.ParseException e) {
+                    if (e != null) {
+                        Log.d("MVC", "get current games error: " + e + " " + e.getCause());
+                    } else {
+                        Log.d("MVC", "got the current games");
+                        currentGames = games;
+                        Log.d("DEBUG", "Done getting current");
+
+
+
+                    }
+                }
+            });
+        }
+
+        if(currentGames == null){
+            Log.i("DEBUG", "currentGames is still null");
+        }
+        return currentGames;
+    }
+
+    public void setCurrentGames(List<Game> games){
+        currentGames = games;
+    }
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getCurrentGames();
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
