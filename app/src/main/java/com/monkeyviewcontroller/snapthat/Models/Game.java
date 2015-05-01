@@ -1,9 +1,13 @@
 package com.monkeyviewcontroller.snapthat.Models;
 
+import android.util.Log;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,5 +62,28 @@ public class Game extends ParseObject {
     public  void setWinner(ParseUser winner) { put("winner", winner);}
 
     public void setParticipants(ArrayList<STUser> participants) { put("participants", participants);}
+
+    public void setSubmissions(JSONArray submissions){
+        put("submissions", submissions);
+    }
+
+    public JSONArray getSubmissions(){
+        JSONArray submissions = getJSONArray("submissions");
+        if(submissions == null){
+            Log.i("MVC", "getSubmissions(), submissions == null");
+            return new JSONArray();
+        }
+        return submissions;
+    }
+
+    public void addToSubmissions(String submissionOID){
+        JSONArray newSubmissions = getSubmissions().put(submissionOID);
+        if(newSubmissions == null){
+            Log.i("MVC", "addToSubmissions(), newSubmissions == null");
+        }
+        put("submissions", newSubmissions);
+    }
+
+
 
 }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.Models.Submission;
 import com.parse.GetCallback;
@@ -25,6 +26,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.json.JSONArray;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -61,6 +64,8 @@ public class PhotoPreviewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Log.d("MVC","Confirm Clicked");
+
+                saveToParse();
 
                 Intent intent = new Intent(PhotoPreviewActivity.this, GameSelectionActivity.class);
                 startActivity(intent);
@@ -166,30 +171,14 @@ public class PhotoPreviewActivity extends Activity {
         ParseFile pictureFile = new ParseFile(pictureInBytes);
 
 
-        Submission newSubmission = new Submission();
+        final Submission newSubmission = new Submission();
 
         newSubmission.setPicture(pictureFile);
         newSubmission.setCreator(ParseUser.getCurrentUser());
         newSubmission.setHasProcessed(false);
         newSubmission.setIsValid(false);
 
-        //associate submission with game
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Game");
-
-        // Retrieve the object by id
-        query.getInBackground(gameOID, new GetCallback<ParseObject>() {
-            public void done(ParseObject Game, ParseException e) {
-                if (e == null) {
-                    // Now let's update it with some new data. In this case, only cheatMode and score
-                    // will get sent to the Parse Cloud. playerName hasn't changed.
-                   // Game.getSubmissions();
-                    Game.put("score", 1338);
-
-                    //gameScore.saveInBackground();
-                }
-            }
-        });
 
 
 
@@ -201,6 +190,27 @@ public class PhotoPreviewActivity extends Activity {
                 //TODO:Show progress indicator, photo upload takes time
                 //TODO:Refactor above code
                 //TODO: Update Game Object to reflect submission
+
+                //associate submission with game
+
+                ParseQuery<Game> query = ParseQuery.getQuery("Game");
+
+                // Retrieve the object by id
+                query.getInBackground(gameOID, new GetCallback<Game>() {
+                    public void done(Game game, ParseException e) {
+                        if (e == null) {
+                            game.addToSubmissions(newSubmission.getObjectId());
+                            game.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    Log.i("DEBUG", "YES");
+                                }
+                            });
+                        }
+                    }
+                });
+
+
                 finish();
             }
         });

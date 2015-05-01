@@ -20,6 +20,8 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,6 +76,7 @@ public class CreateGameActivity extends Activity {
         params.put("creator", creator.getObjectId());
         params.put("searchItem", "monkey");
         params.put("participants",participantIds);
+        params.put("submissions", new JSONArray());
 
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Please wait.");
