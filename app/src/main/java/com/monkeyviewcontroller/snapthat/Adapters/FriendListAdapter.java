@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -68,9 +69,9 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
 
         cbMyFriends.setChecked(selected[position]);
 
-        ImageButton btnSettings = (ImageButton) view.findViewById(R.id.ibtnSettings);
-        setViewBackgroundWithoutResettingPadding(btnSettings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
+        ImageView ivSettings = (ImageView) view.findViewById(R.id.ivSettings);
+        setViewBackgroundWithoutResettingPadding(ivSettings);
+        ivSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -83,9 +84,9 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
 
 
 
-        ImageButton btnRemoveFriend = (ImageButton) view.findViewById(R.id.ibtnRemoveFriend);
-        setViewBackgroundWithoutResettingPadding(btnRemoveFriend);
-        btnRemoveFriend.setOnClickListener(new View.OnClickListener() {
+        ImageView ivRemoveFriend = (ImageView) view.findViewById(R.id.ivRemoveFriend);
+        setViewBackgroundWithoutResettingPadding(ivRemoveFriend);
+        ivRemoveFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

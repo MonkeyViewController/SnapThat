@@ -3,18 +3,19 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="48dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     android:descendantFocusability="blocksDescendants">
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cbMyFriends"
-        android:layout_marginLeft="16dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"/>
 
     <TextView
-        android:layout_marginLeft="72dp"
+        android:layout_marginLeft="58dp"
         android:id="@+id/tvItemTextUsername"
         android:focusable="false"
         android:textIsSelectable="false"
@@ -25,9 +26,9 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"/>
 
-    <ImageButton
-        android:id="@+id/ibtnSettings"
-        android:src="@drawable/ic_settings_black_24dp"
+    <ImageView
+        android:id="@+id/ivSettings"
+        android:src="@drawable/ic_settings_grey600_24dp"
         android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,9 +36,9 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="34dp"/>
 
-    <ImageButton
-        android:id="@+id/ibtnRemoveFriend"
-        android:src="@drawable/ic_clear_black_24dp"
+    <ImageView
+        android:id="@+id/ivRemoveFriend"
+        android:src="@drawable/ic_clear_grey600_24dp"
         android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

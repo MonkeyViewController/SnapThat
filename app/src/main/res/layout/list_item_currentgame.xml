@@ -1,45 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="blocksDescendants">
+    android:layout_height="72dp"
+    android:descendantFocusability="blocksDescendants"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <TextView
         android:id="@+id/tvItemTerm"
-        android:paddingLeft="10dp"
         android:focusable="false"
         android:textIsSelectable="false"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"/>
-
-    <TextView
-        android:id="@+id/tvItemCreator"
-        android:paddingLeft="10dp"
-        android:focusable="false"
-        android:textIsSelectable="false"
-        android:layout_weight="1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"/>
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/black"
+        android:layout_marginTop="16dp"
+        android:paddingBottom="8dp"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/tvItemDate"
         android:paddingLeft="10dp"
         android:focusable="false"
         android:textIsSelectable="false"
-        android:layout_weight="1"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"/>
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:paddingBottom="8dp"
+        android:textSize="14sp"/>
 
-    <ImageButton
-        android:id="@+id/ibtnGoToSnap"
-        android:src="@android:drawable/ic_media_play"
+    <TextView
+        android:id="@+id/tvItemCreator"
+        android:focusable="false"
+        android:textIsSelectable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tvItemTerm"
+        android:textSize="14sp"/>
+
+    <ImageView
+        android:id="@+id/ivGoToSnap"
+        android:src="@drawable/ic_camera_alt_grey600_24dp"
         android:focusable="false"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tvItemDate"/>
 
-</LinearLayout>
+</RelativeLayout>

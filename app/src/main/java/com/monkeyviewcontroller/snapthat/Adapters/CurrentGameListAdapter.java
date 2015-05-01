@@ -12,9 +12,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
@@ -26,41 +28,52 @@ import com.parse.ParseUser;
 
 public class CurrentGameListAdapter extends ArrayAdapter<Game> {
 
-    Context context;
-    List<Game> currentGames;
+    private static class ViewHolder {
+        TextView tvItemTerm;
+        TextView tvItemCreator;
+        TextView tvItemDate;
+        ImageView ivGoToSnap;
+    }
 
     public CurrentGameListAdapter(Context context, List<Game> objects) {
         super(context, R.layout.list_item_currentgame, objects);
-        this.context = context;
-        this.currentGames = objects;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.list_item_currentgame, parent, false);
 
-        TextView tvItemTerm = (TextView) view.findViewById(R.id.tvItemTerm);
-        tvItemTerm.setText("#" + currentGames.get(position).getSearchItem());
+        Game currentGame = getItem(position);
+        ViewHolder viewHolder;
 
-        TextView tvItemCreator = (TextView) view.findViewById(R.id.tvItemCreator);
-        tvItemCreator.setText(currentGames.get(position).getCreatorUsername());
+        if(convertView == null) {
+            viewHolder = new ViewHolder();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.list_item_currentgame, parent, false);
+            viewHolder.tvItemTerm = (TextView) convertView.findViewById(R.id.tvItemTerm);
+            viewHolder.tvItemCreator = (TextView) convertView.findViewById(R.id.tvItemCreator);
+            viewHolder.tvItemDate = (TextView) convertView.findViewById(R.id.tvItemDate);
+            viewHolder.ivGoToSnap = (ImageView) convertView.findViewById(R.id.ivGoToSnap);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
 
-        TextView tvItemDate = (TextView) view.findViewById(R.id.tvItemDate);
-        tvItemDate.setText(currentGames.get(position).getCreatedDate().toString());
+        viewHolder.tvItemTerm.setText("#" + currentGame.getSearchItem());
+        viewHolder.tvItemCreator.setText(currentGame.getCreatorUsername());
+        Date temp = currentGame.getCreatedDate();
+        viewHolder.tvItemDate.setText(temp.getMonth() + "/" + temp.getDay() + "/" + (temp.getYear()+1900));
 
-        ImageButton ibtnGoToSnap = (ImageButton) view.findViewById(R.id.ibtnGoToSnap);
-        ibtnGoToSnap.setOnClickListener(new View.OnClickListener() {
+        viewHolder.ivGoToSnap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Log.d("MVC", "Clicking go to snap button");
-                ViewPager vp = (ViewPager)((Activity)context).findViewById(R.id.pager);
+                ViewPager vp = (ViewPager)((Activity)getContext()).findViewById(R.id.pager);
                 vp.setCurrentItem(1, true);
             }
         });
 
-        return view;
+        return convertView;
     }
 
 }

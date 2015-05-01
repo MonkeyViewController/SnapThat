@@ -32,9 +32,6 @@ import org.w3c.dom.Text;
 
 public class PastGameListAdapter extends ArrayAdapter<Game> {
 
-    Context context;
-    List<Game> pastGames;
-
     private static class ViewHolder {
         TextView tvTermAndWinner;
         //total submissions?(not so relevant because goal is speed so submissions will generally be low)
@@ -45,8 +42,6 @@ public class PastGameListAdapter extends ArrayAdapter<Game> {
 
     public PastGameListAdapter(Context context, List<Game> objects) {
         super(context, R.layout.list_item_pastgame, objects);
-        this.context = context;
-        this.pastGames = objects;
     }
 
     @Override
