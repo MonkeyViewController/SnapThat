@@ -71,6 +71,7 @@ public class SnapsFragment extends Fragment {
         setupActiveGamesButton(mPicture);
         setupSelectedTermTextView();
         setupTermsDropdown();
+        selectedTermIndex = -1;
 
         //TODO; front facing camera switcher
         return rootView;
@@ -202,6 +203,9 @@ public class SnapsFragment extends Fragment {
                 //Store selectedGameOID so that we can save to parse in the PhotoPreviewActivity
                 intent.putExtra("selectedGameOID",selectedGameOID);
                 startActivity(intent);
+
+                selectedTermIndex = -1;
+                setupSelectedTermTextView();
             }
         };
 
@@ -215,6 +219,10 @@ public class SnapsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("Camera", "Capture Button Clicked");
+
+                //If the user has not selected a game, do not allow them to take a photo.
+                if(selectedTermIndex == -1)
+                    return;
 
                 mCamera.takePicture(null, null, mPicture);
             }

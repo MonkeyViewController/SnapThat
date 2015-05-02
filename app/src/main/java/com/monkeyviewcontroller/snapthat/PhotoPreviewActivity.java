@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
@@ -46,6 +47,7 @@ public class PhotoPreviewActivity extends Activity {
     private ImageButton cancelSubmissionButton;
     private ImageButton previewConfirmButton;
     private String gameOID;
+    private byte[] photoData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class PhotoPreviewActivity extends Activity {
         Log.i("DEBUG","selectedGameOID is "+ gameOID);
 
         photoImageView = (ImageView) findViewById(R.id.photoImageView);
+        photoData = getPhotoData();
         setPhotoToView();
 
         previewConfirmButton = (ImageButton) findViewById(R.id.previewConfirmButton);
@@ -65,10 +68,7 @@ public class PhotoPreviewActivity extends Activity {
             public void onClick(View view) {
                 Log.d("MVC","Confirm Clicked");
 
-                saveToParse();
-
-                Intent intent = new Intent(PhotoPreviewActivity.this, GameSelectionActivity.class);
-                startActivity(intent);
+                saveSubmission(); // calls Finish()
             }
         });
 
@@ -83,93 +83,59 @@ public class PhotoPreviewActivity extends Activity {
         });
     }
 
+    private byte[] getPhotoData()
+    {
+        byte[] bytes = null;
+        try {
+            Log.d("MVC", "Lets retrieve the preview");
+            File inputDir = new File(getCacheDir(), "photopreview.tmp");
+            int size = (int) inputDir.length();
+            Log.d("MVC", "File Size: " + size);
+            Log.d("MVC", "File Path: " + inputDir.getAbsolutePath());
+            bytes = new byte[size];
+            new FileInputStream(inputDir).read(bytes);
+            //THIS ISN'T GUARANTEED TO READ THE WHOLE FILE
+            Log.d("MVC", "Byte array retrieved from cache file");
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return bytes;
+    }
+
     private void setPhotoToView() {
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
 
-        byte[] bytes = null;
-        try {
-            Log.d("MVC", "Lets retrieve the preview");
-            File inputDir = new File(getCacheDir(), "photopreview.tmp");
-            int size = (int) inputDir.length();
-            Log.d("MVC", "File Size: " + size);
-            Log.d("MVC", "File Path: " + inputDir.getAbsolutePath());
-            bytes = new byte[size];
-            new FileInputStream(inputDir).read(bytes);
-            //THIS ISN'T GUARANTEED TO READ THE WHOLE FILE
-            Log.d("MVC", "Byte array retrieved from cache file");
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        if(bytes==null)
+        if(photoData==null)
+        {
+            Log.d("MVC", "Byte array is null when attempting to set photo preview.");
+            Toast.makeText(PhotoPreviewActivity.this, "SnapThat was not able to create a photo preview. Take another Snap and try again.", Toast.LENGTH_LONG).show();
             return;
-
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-        // Use matrix to rotate bitmap image
-        // to compensate for 90 manual rotation in preview workaround
-        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-
-        //TEMP: Set ImageView ontop of preview to display image
-        photoImageView.setImageBitmap(rotatedBitmap);
-
-        //String encodedImage = Base64.encodeToString(data, Base64.DEFAULT);
-        //Log.i("img",encodedImage);
-
-        //TODO: Transmit photo data to server/parse
-        //TODO: display UI on top to cancel or go to next screen(choose which game and send)?
-    }
-
-    private Bitmap retrievePhotoBitmap() {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-
-        byte[] bytes = null;
-        try {
-            Log.d("MVC", "Lets retrieve the preview");
-            File inputDir = new File(getCacheDir(), "photopreview.tmp");
-            int size = (int) inputDir.length();
-            Log.d("MVC", "File Size: " + size);
-            Log.d("MVC", "File Path: " + inputDir.getAbsolutePath());
-            bytes = new byte[size];
-            new FileInputStream(inputDir).read(bytes);
-            //THIS ISN'T GUARANTEED TO READ THE WHOLE FILE
-            Log.d("MVC", "Byte array retrieved from cache file");
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
 
-//        if(bytes==null)
-//            return new Bitmap();
-
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
 
         // Use matrix to rotate bitmap image
         // to compensate for 90 manual rotation in preview workaround
         Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        return  rotatedBitmap;
-
+        photoImageView.setImageBitmap(rotatedBitmap);
     }
 
-    private void saveToParse(){
+    private void saveSubmission(){
 
-        //TODO: modify setPhotoToView to save a instance variable containing bitmap to avoid duplicate file I/O
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        if(photoData==null)
+        {
+            Log.d("MVC", "Byte array is null when attempting to save file to parse. Exiting");
+            Toast.makeText(PhotoPreviewActivity.this, "SnapThat was not able to submit your photo. Take another Snap and try again.", Toast.LENGTH_LONG).show();
+            finish();
+        }
 
-        //Retrieve photo from file
-        retrievePhotoBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] pictureInBytes = stream.toByteArray();
-        ParseFile pictureFile = new ParseFile(pictureInBytes);
-
+        ParseFile pictureFile = new ParseFile(photoData);
 
         final Submission newSubmission = new Submission();
 
@@ -177,10 +143,7 @@ public class PhotoPreviewActivity extends Activity {
         newSubmission.setCreator(ParseUser.getCurrentUser());
         newSubmission.setHasProcessed(false);
         newSubmission.setIsValid(false);
-
-
-
-
+        newSubmission.put("forGame", ParseObject.createWithoutData("Game", gameOID));
 
         newSubmission.saveInBackground(new SaveCallback() {
             @Override
@@ -209,7 +172,6 @@ public class PhotoPreviewActivity extends Activity {
                         }
                     }
                 });
-
 
                 finish();
             }
