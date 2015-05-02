@@ -19,7 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/black_transparent"
+        android:background="@color/black_transparent_80"
         android:orientation="vertical"
         android:padding="3dp">
 

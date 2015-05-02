@@ -70,7 +70,6 @@ public class CurrentGamesFragment extends Fragment {
 
         loadAllCurrentGames();
 
-        //TODO: only show button when 1 item is selected, fade when scrolling, fix when it covers bottom row
         lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view,
@@ -102,7 +101,6 @@ public class CurrentGamesFragment extends Fragment {
                 else {
                     Log.d("MVC", "got the current games");
                     currentGames = games;
-                    ((MainActivity)getActivity()).setCurrentGames(games);
                     listAdapter = new CurrentGameListAdapter(getActivity(), games);
 
                     if (listAdapter.isEmpty()) {

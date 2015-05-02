@@ -17,10 +17,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <Spinner
-                android:id="@+id/termsSpinner"
+            <TextView
+                android:id="@+id/tvSelectedTerm"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:background="@color/black_transparent_25"/>
 
             <ImageButton
                 android:id="@+id/games_button"
@@ -65,13 +78,12 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginRight="20dp"
                 android:layout_alignParentRight="true"
-                android:src="@android:drawable/ic_menu_camera"
+                android:src="@drawable/ic_arrow_drop_down_white_24dp"
                 android:background="@drawable/circle_button"
                 />
 
         </RelativeLayout>
 
     </FrameLayout>
-
 
 </LinearLayout>

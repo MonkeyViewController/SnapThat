@@ -2,6 +2,7 @@ package com.monkeyviewcontroller.snapthat.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,6 +69,7 @@ public class CurrentGameListAdapter extends ArrayAdapter<Game> {
             public void onClick(View v) {
 
                 Log.d("MVC", "Clicking go to snap button");
+                ((Activity)getContext()).getIntent().putExtra("selectedTermIndex", position);
                 ViewPager vp = (ViewPager)((Activity)getContext()).findViewById(R.id.pager);
                 vp.setCurrentItem(1, true);
             }

@@ -13,12 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListPopupWindow;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Game;
@@ -37,25 +40,18 @@ import java.util.List;
 
 public class SnapsFragment extends Fragment {
 
-    private Spinner termsSpinner;
+    private ListPopupWindow listPopupWindow;
     private Camera mCamera;
     private CameraPreview mPreview;
     private View rootView;
-    private  List<Game> games;
+    private  List<Game> currentGames;
+    private int selectedTermIndex;
+    private TextView tvSelectedTerm;
+    private ImageButton activeGamesButton;
 
     public static SnapsFragment newInstance() {
         SnapsFragment fragment = new SnapsFragment();
         return fragment;
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            //Wait until snapsFragment is visible, then build the Spinner
-            //Game data has already been downloaded
-            setupTermsDropdown();
-        }
     }
 
     public  SnapsFragment(){}
@@ -73,32 +69,112 @@ public class SnapsFragment extends Fragment {
         setupFriendsButton(mPicture);
         setupGamesButton(mPicture);
         setupActiveGamesButton(mPicture);
-
+        setupSelectedTermTextView();
+        setupTermsDropdown();
 
         //TODO; front facing camera switcher
         return rootView;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            Log.d("MVC", "Snapsfragment is visible");
+            Intent intent = getActivity().getIntent();
+
+            if(intent.hasExtra("selectedTermIndex")) {
+                Log.d("MVC", "User selected a game in order to here.");
+
+                setTermTextViewFromIndex(intent.getIntExtra("selectedTermIndex", -1));
+                intent.removeExtra("selectedTermIndex");
+            }
+        }
+        else {
+            Log.d("MVC", "Snapsfragment is not visible");
+        }
+    }
+
+    private void setTermTextViewFromIndex(final int index)
+    {
+        if(index == -1)
+            return;
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user", ParseUser.getCurrentUser().getObjectId());
+
+        ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<Game>>() {
+            @Override
+            public void done(List<Game> games, com.parse.ParseException e) {
+                if (e != null) {
+                    Log.d("MVC", "get current games error: " + e + " " + e.getCause());
+                } else {
+                    Log.d("MVC", "got the current games");
+                    currentGames = games;
+                    List<String> list = new ArrayList<>();
+                    for (Game g: games){
+                        list.add(g.getSearchItem());
+                    }
+
+                    tvSelectedTerm.setText(list.get(index));
+                    selectedTermIndex = index;
+                }
+            }
+        });
+    }
+
+    private void setupSelectedTermTextView()
+    {
+        tvSelectedTerm = (TextView) rootView.findViewById(R.id.tvSelectedTerm);
+        tvSelectedTerm.setText("No Game Selected");
+    }
+
     private void setupTermsDropdown(){
-        termsSpinner = (Spinner) rootView.findViewById(R.id.termsSpinner);
+
+        Log.d("MVC", "Setting up dropdown");
+
+        listPopupWindow = new ListPopupWindow(getActivity());
         List<String> list = new ArrayList<>();
 
-        games = ((MainActivity)getActivity()).getCurrentGames();
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("user", ParseUser.getCurrentUser().getObjectId());
 
-        for (Game g: games){
-            list.add(g.getSearchItem());
-        }
+        ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<Game>>() {
+            @Override
+            public void done(List<Game> games, com.parse.ParseException e) {
+                if (e != null) {
+                    Log.d("MVC", "get current games error: " + e + " " + e.getCause());
+                } else {
+                    Log.d("MVC", "got the current games");
+                    currentGames = games;
+                    List<String> list = new ArrayList<>();
+                    for (Game g: games){
+                        list.add(g.getSearchItem());
+                    }
 
-        Log.i("DEBUG", getActivity().toString());
+                    listPopupWindow.setAdapter(new ArrayAdapter(
+                            getActivity(),
+                            android.R.layout.simple_list_item_1, list));
+                }
+            }
+        });
 
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, list);
+        listPopupWindow.setAnchorView(activeGamesButton);
+        listPopupWindow.setWidth(300);
+        listPopupWindow.setHeight(400);
+        listPopupWindow.setModal(true);
+        //listPopupWindow.setHorizontalOffset(-20);
+        //listPopupWindow.setVerticalOffset(-40);
 
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        // attaching data adapter to spinner
-        termsSpinner.setAdapter(dataAdapter);
+                tvSelectedTerm.setText(currentGames.get(position).getSearchItem());
+                selectedTermIndex = position;
+                listPopupWindow.dismiss();
+            }
+        });
     }
 
     private Camera.PictureCallback setupImageCapture(){
@@ -119,11 +195,8 @@ public class SnapsFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                int selectedTermIndex = termsSpinner.getSelectedItemPosition();
-
                 //TODO: save and transmit oid of selected game to the preview
-                String selectedGameOID = games.get(selectedTermIndex).getObjectId();
-
+                String selectedGameOID = currentGames.get(selectedTermIndex).getObjectId();
 
                 Intent intent = new Intent(getActivity(), PhotoPreviewActivity.class);
                 //Store selectedGameOID so that we can save to parse in the PhotoPreviewActivity
@@ -176,32 +249,11 @@ public class SnapsFragment extends Fragment {
     }
 
     private void setupActiveGamesButton(final Camera.PictureCallback mPicture){
-        ImageButton activeGamesButton = (ImageButton) rootView.findViewById(R.id.activegames_button);
+        activeGamesButton = (ImageButton) rootView.findViewById(R.id.activegames_button);
 
         activeGamesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("MVC", "Active Games Button Clicked");
-
-                HashMap<String, Object> params = new HashMap<String, Object>();
-                params.put("user", ParseUser.getCurrentUser().getObjectId());
-
-                ParseCloud.callFunctionInBackground("getcurrentgamesterms", params, new FunctionCallback<List<String>>() {
-                    @Override
-                    public void done(List<String> terms, com.parse.ParseException e) {
-
-                        if (e != null) {
-                            Log.d("MVC", "get current games terms error: " + e + " " + e.getCause());
-                        } else {
-                            Log.d("MVC", "got the current games terms");
-
-                            for(String s: terms)
-                            {
-                                Log.d("MVC", "Terms: " + s);
-                            }
-                        }
-                    }
-                });
+            public void onClick(View v) {
+                listPopupWindow.show();
             }
         });
     }
@@ -246,6 +298,7 @@ public class SnapsFragment extends Fragment {
 
     @Override
     public void onResume() {
+        Log.d("MVC", "Resuming snapfragment");
         super.onResume();
         safeCameraOpenInView(rootView);
     }
