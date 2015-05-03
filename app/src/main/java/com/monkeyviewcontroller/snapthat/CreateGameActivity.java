@@ -45,7 +45,7 @@ public class CreateGameActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d("MVC", "Clicked begin game button");
-                registerNewGameWithParse("monkey", ParseUser.getCurrentUser(), participantIds);
+                registerNewGameWithParse("laptop", ParseUser.getCurrentUser(), participantIds);
             }
         });
 
@@ -74,7 +74,7 @@ public class CreateGameActivity extends Activity {
 
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("creator", creator.getObjectId());
-        params.put("searchItem", "monkey");
+        params.put("searchItem", searchTerm);
         params.put("participants",participantIds);
         params.put("submissions", new JSONArray());
 

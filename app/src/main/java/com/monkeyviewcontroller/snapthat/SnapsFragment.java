@@ -132,10 +132,11 @@ public class SnapsFragment extends Fragment {
 
     private void setupTermsDropdown(){
 
+        //TODO: adding games and then clicking on the dropdown will not show all games - the dropdown has already been created
+        //TODO: must either recreate the dropdown every click, reset the adapter, or find a way to send a notification to recreate popup
         Log.d("MVC", "Setting up dropdown");
 
         listPopupWindow = new ListPopupWindow(getActivity());
-        List<String> list = new ArrayList<>();
 
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user", ParseUser.getCurrentUser().getObjectId());
@@ -150,6 +151,7 @@ public class SnapsFragment extends Fragment {
                     currentGames = games;
                     List<String> list = new ArrayList<>();
                     for (Game g: games){
+                        Log.d("MVC", g.getSearchItem());
                         list.add(g.getSearchItem());
                     }
 
@@ -171,6 +173,7 @@ public class SnapsFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                Log.d("MVC", "List popup selected index: " + position);
                 tvSelectedTerm.setText(currentGames.get(position).getSearchItem());
                 selectedTermIndex = position;
                 listPopupWindow.dismiss();
