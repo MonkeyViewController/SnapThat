@@ -48,6 +48,7 @@ public class PhotoPreviewActivity extends Activity {
     private ImageButton previewConfirmButton;
     private String gameOID;
     private byte[] photoData;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,6 @@ public class PhotoPreviewActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Log.d("MVC","Confirm Clicked");
-
                 saveSubmission(); // calls Finish()
             }
         });
@@ -78,6 +78,7 @@ public class PhotoPreviewActivity extends Activity {
             public void onClick(View view) {
                 Log.d("MVC", "Cancel Clicked");
                 //Close PhotoPreviewActivity and return to primary view
+                bitmap.recycle();
                 finish();
             }
         });
@@ -118,7 +119,7 @@ public class PhotoPreviewActivity extends Activity {
             return;
         }
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
+        bitmap = BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
 
         // Use matrix to rotate bitmap image
         // to compensate for 90 manual rotation in preview workaround
@@ -135,7 +136,12 @@ public class PhotoPreviewActivity extends Activity {
             finish();
         }
 
-        ParseFile pictureFile = new ParseFile(photoData);
+        //No scaling used atm but should be a consideration
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] scaledData = bos.toByteArray();
+        ParseFile pictureFile = new ParseFile("submission_photo.jpg",scaledData);
+        bitmap.recycle();
 
         final Submission newSubmission = new Submission();
 
