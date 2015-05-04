@@ -23,7 +23,9 @@
 		android:id="@+id/lvQueryResults"
         android:divider="@null"
 		android:dividerHeight="0dp"
+        android:paddingTop="8dp"
         android:paddingBottom="100dp"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false"
+        android:choiceMode="multipleChoice"/>
 
 </LinearLayout>

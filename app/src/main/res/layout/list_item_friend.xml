@@ -14,8 +14,35 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"/>
 
+    <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="40dp">
+
+        <ImageView
+            android:id="@+id/ivWinsBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/friendlist_simple_circle" />
+
+        <TextView
+            android:id="@+id/tvWins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="1dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/white" />
+
+        </RelativeLayout>
+
     <TextView
-        android:layout_marginLeft="58dp"
+        android:layout_marginLeft="96dp"
         android:id="@+id/tvItemTextUsername"
         android:focusable="false"
         android:textIsSelectable="false"
@@ -34,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="34dp"/>
+        android:layout_marginRight="40dp"/>
 
     <ImageView
         android:id="@+id/ivRemoveFriend"

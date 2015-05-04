@@ -27,31 +27,48 @@ import com.parse.ParseUser;
 
 public class FriendListAdapter extends ArrayAdapter<STUser> {
 
-    Context context;
-    List<STUser> friends;
-    private Boolean[] selected;
     private FloatingActionButton fab;
+    private Boolean[] selected;
+
+    private static class ViewHolder {
+        TextView tvWins;
+        TextView tvItemTextUsername;
+        ImageView ivSettings;
+        ImageView ivRemoveFriend;
+        ImageView ivWinsBackground;
+        CheckBox cbMyFriends;
+    }
 
     public FriendListAdapter(Context context, List<STUser> objects, FloatingActionButton fab) {
         super(context, R.layout.list_item_friend, objects);
-        this.context = context;
-        this.friends = objects;
         this.fab = fab;
 
-        selected = new Boolean[this.friends.size()];
+        selected = new Boolean[objects.size()];
         Arrays.fill(selected, false);
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.list_item_friend, parent, false);
 
-        TextView tvItemTextUsername = (TextView) view.findViewById(R.id.tvItemTextUsername);
-        tvItemTextUsername.setText(friends.get(position).getUsername());
+        final STUser friend = getItem(position);
+        ViewHolder viewHolder;
 
-        CheckBox cbMyFriends = (CheckBox)view.findViewById(R.id.cbMyFriends);
-        cbMyFriends.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        if(convertView == null) {
+            viewHolder = new ViewHolder();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.list_item_friend, parent, false);
+            viewHolder.tvWins = (TextView) convertView.findViewById(R.id.tvWins);
+            viewHolder.tvItemTextUsername = (TextView) convertView.findViewById(R.id.tvItemTextUsername);
+            viewHolder.ivSettings = (ImageView) convertView.findViewById(R.id.ivSettings);
+            viewHolder.ivRemoveFriend = (ImageView) convertView.findViewById(R.id.ivRemoveFriend);
+            viewHolder.ivWinsBackground = (ImageView) convertView.findViewById(R.id.ivWinsBackground);
+            viewHolder.cbMyFriends = (CheckBox) convertView.findViewById(R.id.cbMyFriends);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        viewHolder.cbMyFriends.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -67,11 +84,13 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
             }
         });
 
-        cbMyFriends.setChecked(selected[position]);
+        viewHolder.cbMyFriends.setChecked(selected[position]);
 
-        ImageView ivSettings = (ImageView) view.findViewById(R.id.ivSettings);
-        setViewBackgroundWithoutResettingPadding(ivSettings);
-        ivSettings.setOnClickListener(new View.OnClickListener() {
+        viewHolder.tvWins.setText(String.valueOf(friend.getWins()));
+        viewHolder.tvItemTextUsername.setText(friend.getUsername());
+
+        setViewBackgroundWithoutResettingPadding(viewHolder.ivSettings);
+        viewHolder.ivSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -82,11 +101,8 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
             }
         });
 
-
-
-        ImageView ivRemoveFriend = (ImageView) view.findViewById(R.id.ivRemoveFriend);
-        setViewBackgroundWithoutResettingPadding(ivRemoveFriend);
-        ivRemoveFriend.setOnClickListener(new View.OnClickListener() {
+        setViewBackgroundWithoutResettingPadding(viewHolder.ivRemoveFriend);
+        viewHolder.ivRemoveFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -95,13 +111,14 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
                 Log.d("MVC", "Clicking Remove friend.");
                 HashMap<String, Object> params = new HashMap<String, Object>();
                 params.put("user", ParseUser.getCurrentUser().getObjectId());
-                params.put("friend", friends.get(position).getObjectId());
+                params.put("friend",friend.getObjectId());
                 ParseCloud.callFunctionInBackground("removefriend", params);
-                friends.remove(position);
+                remove(friend);
                 notifyDataSetChanged();
             }
         });
-        return view;
+
+        return convertView;
     }
 
     public static void setViewBackgroundWithoutResettingPadding(final View v) {

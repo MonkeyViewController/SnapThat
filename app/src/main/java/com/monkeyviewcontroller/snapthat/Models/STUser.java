@@ -18,6 +18,8 @@ public class STUser extends ParseUser {
 
     public String getBirthday() { return getString("birthday"); }
 
+    public int getWins() { return getInt("wins"); }
+
     public String getEmail() { return getString("email"); }
 
     public Model getModel() { return new Model(this); }

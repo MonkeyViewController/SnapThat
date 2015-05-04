@@ -128,6 +128,7 @@ public class SignupActivity extends FragmentActivity {
             user.setEmail(email);
             user.setPassword(password);
             user.put("birthday",birthday);
+            user.put("wins", 0);
 
             user.signUpInBackground(new SignUpCallback() {
                 @Override
