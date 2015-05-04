@@ -76,14 +76,12 @@ public class Game extends ParseObject {
         return submissions;
     }
 
-    public void addToSubmissions(String submissionOID){
-        JSONArray newSubmissions = getSubmissions().put(submissionOID);
+    public void addToSubmissions(Submission submission){
+        JSONArray newSubmissions = getSubmissions().put(submission);
         if(newSubmissions == null){
             Log.i("MVC", "addToSubmissions(), newSubmissions == null");
         }
         put("submissions", newSubmissions);
     }
-
-
 
 }

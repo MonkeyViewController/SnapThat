@@ -168,18 +168,23 @@ public class PhotoPreviewActivity extends Activity {
                 query.getInBackground(gameOID, new GetCallback<Game>() {
                     public void done(Game game, ParseException e) {
                         if (e == null) {
-                            game.addToSubmissions(newSubmission.getObjectId());
+                            game.addToSubmissions(newSubmission);
                             game.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
-                                    Log.i("DEBUG", "YES");
+                                    if (e == null){
+                                        Toast.makeText(PhotoPreviewActivity.this, "Submission Successful!", Toast.LENGTH_LONG).show();
+                                        finish();
+                                    }
+                                    else {
+                                        Toast.makeText(PhotoPreviewActivity.this, "Submission Error!", Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             });
                         }
                     }
                 });
 
-                finish();
             }
         });
     }
