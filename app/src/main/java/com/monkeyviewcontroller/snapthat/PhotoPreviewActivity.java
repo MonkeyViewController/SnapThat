@@ -49,6 +49,7 @@ public class PhotoPreviewActivity extends Activity {
     private String gameOID;
     private byte[] photoData;
     private Bitmap bitmap;
+    private Bitmap rotatedBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class PhotoPreviewActivity extends Activity {
                 Log.d("MVC", "Cancel Clicked");
                 //Close PhotoPreviewActivity and return to primary view
                 bitmap.recycle();
+                rotatedBitmap.recycle();
                 finish();
             }
         });
@@ -123,8 +125,9 @@ public class PhotoPreviewActivity extends Activity {
 
         // Use matrix to rotate bitmap image
         // to compensate for 90 manual rotation in preview workaround
-        Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
         photoImageView.setImageBitmap(rotatedBitmap);
+        bitmap.recycle();
     }
 
     private void saveSubmission(){
@@ -138,10 +141,10 @@ public class PhotoPreviewActivity extends Activity {
 
         //No scaling used atm but should be a consideration
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         byte[] scaledData = bos.toByteArray();
         ParseFile pictureFile = new ParseFile("submission_photo.jpg",scaledData);
-        bitmap.recycle();
+        rotatedBitmap.recycle();
 
         final Submission newSubmission = new Submission();
 
