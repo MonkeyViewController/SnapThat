@@ -130,8 +130,7 @@ public class PhotoPreviewActivity extends Activity {
         bitmap.recycle();
     }
 
-    private void saveSubmission(){
-
+    private ParseFile convertPhotoToParseFile(Bitmap rotatedBitmap){
         if(photoData==null)
         {
             Log.d("MVC", "Byte array is null when attempting to save file to parse. Exiting");
@@ -145,6 +144,13 @@ public class PhotoPreviewActivity extends Activity {
         byte[] scaledData = bos.toByteArray();
         ParseFile pictureFile = new ParseFile("submission_photo.jpg",scaledData);
         rotatedBitmap.recycle();
+        return pictureFile;
+    }
+
+
+
+    private void saveSubmission(){
+        ParseFile pictureFile = convertPhotoToParseFile(rotatedBitmap);
 
         final Submission newSubmission = new Submission();
 
@@ -157,38 +163,37 @@ public class PhotoPreviewActivity extends Activity {
         newSubmission.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                Log.i("MVC", "Submission has been saved successfully");
-                //TODO:Return to main view
                 //TODO:Show progress indicator, photo upload takes time
-                //TODO:Refactor above code
-                //TODO: Update Game Object to reflect submission
 
                 //associate submission with game
+                associateGameToSubmission(newSubmission);
+            }
+        });
+    }
 
-                ParseQuery<Game> query = ParseQuery.getQuery("Game");
+    private void associateGameToSubmission(final Submission newSubmission){
+        ParseQuery<Game> query = ParseQuery.getQuery("Game");
 
-                // Retrieve the object by id
-                query.getInBackground(gameOID, new GetCallback<Game>() {
-                    public void done(Game game, ParseException e) {
-                        if (e == null) {
-                            game.addToSubmissions(newSubmission);
-                            game.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null){
-                                        Toast.makeText(PhotoPreviewActivity.this, "Submission Successful!", Toast.LENGTH_LONG).show();
-                                        finish();
-                                    }
-                                    else {
-                                        Toast.makeText(PhotoPreviewActivity.this, "Submission Error!", Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            });
+        query.getInBackground(gameOID, new GetCallback<Game>() {
+            public void done(Game game, ParseException e) {
+                if (e == null) {
+                    game.addToSubmissions(newSubmission);
+                    game.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null){
+                                Log.i("MVC", "Submission has been saved successfully");
+                                Toast.makeText(PhotoPreviewActivity.this, "Submission Successful!", Toast.LENGTH_LONG).show();
+                                finish();
+                            }
+                            else {
+                                Toast.makeText(PhotoPreviewActivity.this, "Submission Error!", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
-
+                    });
+                }
             }
         });
     }
 }
+
