@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,34 +138,10 @@ public class SnapsFragment extends Fragment {
         Log.d("MVC", "Setting up dropdown");
 
         listPopupWindow = new ListPopupWindow(getActivity());
-
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("user", ParseUser.getCurrentUser().getObjectId());
-
-        ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<Game>>() {
-            @Override
-            public void done(List<Game> games, com.parse.ParseException e) {
-                if (e != null) {
-                    Log.d("MVC", "get current games error: " + e + " " + e.getCause());
-                } else {
-                    Log.d("MVC", "got the current games");
-                    currentGames = games;
-                    List<String> list = new ArrayList<>();
-                    for (Game g: games){
-                        Log.d("MVC", g.getSearchItem());
-                        list.add(g.getSearchItem());
-                    }
-
-                    listPopupWindow.setAdapter(new ArrayAdapter(
-                            getActivity(),
-                            android.R.layout.simple_list_item_1, list));
-                }
-            }
-        });
-
         listPopupWindow.setAnchorView(activeGamesButton);
-        listPopupWindow.setWidth(300);
-        listPopupWindow.setHeight(400);
+
+        listPopupWindow.setWidth((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics()));
+        listPopupWindow.setHeight((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics()));
         listPopupWindow.setModal(true);
         //listPopupWindow.setHorizontalOffset(-20);
         //listPopupWindow.setVerticalOffset(-40);
@@ -264,7 +241,31 @@ public class SnapsFragment extends Fragment {
 
         activeGamesButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                listPopupWindow.show();
+
+                HashMap<String, Object> params = new HashMap<String, Object>();
+                params.put("user", ParseUser.getCurrentUser().getObjectId());
+
+                ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<Game>>() {
+                    @Override
+                    public void done(List<Game> games, com.parse.ParseException e) {
+                        List<String> list = new ArrayList<>();
+                        if (e != null) {
+                            Log.d("MVC", "get current games error: " + e + " " + e.getCause());
+                        } else {
+                            Log.d("MVC", "got the current games");
+                            currentGames = games;
+                            for (Game g : games) {
+                                Log.d("MVC", g.getSearchItem());
+                                list.add(g.getSearchItem());
+                            }
+
+                            listPopupWindow.setAdapter(new ArrayAdapter(
+                                    getActivity(),
+                                    android.R.layout.simple_list_item_1, list));
+                            listPopupWindow.show();
+                        }
+                    }
+                });
             }
         });
     }

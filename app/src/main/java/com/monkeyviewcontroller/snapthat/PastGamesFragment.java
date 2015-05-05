@@ -1,45 +1,26 @@
 package com.monkeyviewcontroller.snapthat;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
-import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
 import com.monkeyviewcontroller.snapthat.Adapters.PastGameListAdapter;
-import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.Game;
-import com.monkeyviewcontroller.snapthat.Models.STUser;
-import com.parse.FindCallback;
 import com.parse.FunctionCallback;
-import com.parse.ParseACL;
 import com.parse.ParseCloud;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class HistoryGamesFragment extends Fragment {
+public class PastGamesFragment extends Fragment {
 
     private LinearLayout llProgressBar;
     private LinearLayout llEmptyList;
@@ -48,19 +29,19 @@ public class HistoryGamesFragment extends Fragment {
     private ListView lvQueryResults;
     private List<Game> pastGames;
 
-    public static HistoryGamesFragment newInstance() {
-        HistoryGamesFragment fragment = new HistoryGamesFragment();
+    public static PastGamesFragment newInstance() {
+        PastGamesFragment fragment = new PastGamesFragment();
         return fragment;
     }
 
-    public HistoryGamesFragment() {
+    public PastGamesFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("MVC", "Creating the HistoryGamesView");
-        final View rootView = inflater.inflate(R.layout.fragment_historygames, container, false);
+        Log.d("MVC", "Creating the PastGamesView");
+        final View rootView = inflater.inflate(R.layout.fragment_pastgames, container, false);
 
         llProgressBar = (LinearLayout)rootView.findViewById(R.id.llProgressBar);
         llProgressBar.setVisibility(View.VISIBLE);
@@ -92,16 +73,16 @@ public class HistoryGamesFragment extends Fragment {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user",ParseUser.getCurrentUser().getObjectId());
 
-        ParseCloud.callFunctionInBackground("getcurrentgames", params, new FunctionCallback<List<Game>>() {
+        ParseCloud.callFunctionInBackground("getpastgames", params, new FunctionCallback<List<Game>>() {
             @Override
             public void done(List<Game> games, com.parse.ParseException e) {
                 hideProgressDialog();
 
                 if(e!=null) {
-                    Log.d("MVC", "get current games error: " + e + " " + e.getCause());
+                    Log.d("MVC", "get past games error: " + e + " " + e.getCause());
                 }
                 else {
-                    Log.d("MVC", "got the current games");
+                    Log.d("MVC", "got the past games");
                     pastGames = games;
                     listAdapter = new PastGameListAdapter(getActivity(), games);
 

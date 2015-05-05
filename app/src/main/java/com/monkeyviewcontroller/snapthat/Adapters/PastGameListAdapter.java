@@ -61,33 +61,14 @@ public class PastGameListAdapter extends ArrayAdapter<Game> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.tvTermAndWinner.setText(winningGame.getSearchItem() + " [" + this.randomString(6) + "]");
+        viewHolder.tvTermAndWinner.setText(winningGame.getSearchItem() + " [" + winningGame.getWinningSubmission().getCreatorUsername() + "]");
 
         Picasso.with(getContext()).
-                load("https://cms-assets.tutsplus.com/uploads/users/21/posts/19431/featured_image/CodeFeature.jpg") //winningGame.getWinningUrl()
+                load(winningGame.getWinningSubmission().getPhotoURL())
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(viewHolder.ivWinningImage);
 
-        /*viewHolder.tvTermAndWinner.setText(winningGame.getSearchItem() + " [" + winningGame.getWinningUser() + "]");
-
-        Picasso.with(getContext()).
-                load("https://cms-assets.tutsplus.com/uploads/users/21/posts/19431/featured_image/CodeFeature.jpg") //winningGame.getWinningUrl()
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(viewHolder.ivWinningImage);*/
-
         return convertView;
     }
-
-    public String randomString(final int length) {
-        Random r = new Random(); // perhaps make it a class variable so you don't make a new one every time
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < length; i++) {
-            char c = (char)(r.nextInt((int)(Character.MAX_VALUE)));
-            sb.append(c);
-        }
-        return sb.toString();
-    }
-
 }

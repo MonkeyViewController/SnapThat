@@ -23,6 +23,8 @@ public class Submission extends ParseObject {
         return getParseFile("picture");
     }
 
+    public String getPhotoURL() { return getPicture().getUrl(); }
+
     public void setCreator(ParseUser value) {
         put("creator", value);
     }
@@ -44,9 +46,5 @@ public class Submission extends ParseObject {
     public void setHasProcessed(boolean hasProcessed){
         put("hasProcessed", hasProcessed);
     }
-
-
-
-
 
 }

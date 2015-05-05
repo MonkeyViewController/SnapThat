@@ -84,4 +84,5 @@ public class Game extends ParseObject {
         put("submissions", newSubmissions);
     }
 
+    public Submission getWinningSubmission() { return (Submission)get("winningSubmission"); }
 }

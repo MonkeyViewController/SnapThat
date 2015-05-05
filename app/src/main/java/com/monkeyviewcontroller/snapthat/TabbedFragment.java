@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.monkeyviewcontroller.snapthat.R;
-
 public class TabbedFragment extends Fragment {
     private FragmentTabHost mTabHost;
 
@@ -40,10 +38,6 @@ public class TabbedFragment extends Fragment {
         Bundle bundle = this.getArguments();
         int position = bundle.getInt(ARG_SECTION_NUMBER);
 
-       //Can also use activities rather then fragments
-       //mTabHost.addTab(mTabHost.newTabSpec("first").setIndicator("First").setContent(new Intent(this  ,FirstActivity.class )));
-       //mTabHost.addTab(mTabHost.newTabSpec("second").setIndicator("Second").setContent(new Intent(this , SecondActivity.class )));
-
         if(position==0)
         {
             mTabHost.addTab(mTabHost.newTabSpec("myfriendsfragment").setIndicator("My Friends"),
@@ -55,10 +49,10 @@ public class TabbedFragment extends Fragment {
         {
             mTabHost.addTab(mTabHost.newTabSpec("currentgamesfragment").setIndicator("Current"),
                     CurrentGamesFragment.class, null);
+            mTabHost.addTab(mTabHost.newTabSpec("pastgamesfragment").setIndicator("Past"),
+                    PastGamesFragment.class, null);
             mTabHost.addTab(mTabHost.newTabSpec("nearbygamesfragment").setIndicator("Nearby"),
                     NearbyGamesFragment.class,null);
-            mTabHost.addTab(mTabHost.newTabSpec("historygamesfragment").setIndicator("History"),
-                    HistoryGamesFragment.class, null);
         }
 
         mTabHost.setCurrentTab(0);
