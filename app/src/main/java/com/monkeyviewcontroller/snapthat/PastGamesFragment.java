@@ -49,7 +49,7 @@ public class PastGamesFragment extends Fragment {
         lvQueryResults = (ListView)rootView.findViewById(R.id.lvQueryResults);
         tvEmptyList = (TextView)rootView.findViewById(R.id.tvEmptyList);
 
-        loadAllGameHistory();
+        loadPastGames();
 
         //TODO: only show button when 1 item is selected, fade when scrolling, fix when it covers bottom row
         lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,11 +65,10 @@ public class PastGamesFragment extends Fragment {
     }
 
 
-    public void loadAllGameHistory()
+    public void loadPastGames()
     {
         showProgressDialog();
 
-        //TODO: Actually implement this on the cloud
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("user",ParseUser.getCurrentUser().getObjectId());
 

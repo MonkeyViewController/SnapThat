@@ -151,6 +151,9 @@ public class MyFriendsFragment extends Fragment {
                 .customView(R.layout.dialog_creategame, true)
                 .positiveText("Let's Play!")
                 .negativeText("Cancel")
+                .positiveColorRes(R.color.ics_blue)
+                .negativeColorRes(R.color.ics_blue)
+                .widgetColorRes(R.color.ics_blue)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {

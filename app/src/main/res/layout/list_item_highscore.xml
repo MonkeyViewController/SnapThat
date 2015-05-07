@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:descendantFocusability="blocksDescendants">
+
+    <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:id="@+id/ivWinsBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/friendlist_simple_circle" />
+
+        <TextView
+            android:id="@+id/tvWins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="1dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_marginLeft="56dp"
+        android:id="@+id/tvItemTextUsername"
+        android:focusable="false"
+        android:textIsSelectable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"/>
+
+</RelativeLayout>

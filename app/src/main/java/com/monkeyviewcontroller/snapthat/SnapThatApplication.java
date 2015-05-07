@@ -19,8 +19,6 @@ public class SnapThatApplication extends Application {
         ParseObject.registerSubclass(Game.class);
         ParseObject.registerSubclass(Submission.class);
 
-
         Parse.initialize(this,getString(R.string.parse_app_id), getString(R.string.parse_client_id));
-
     }
 }
