@@ -51,8 +51,8 @@ public class TabbedFragment extends Fragment {
                     CurrentGamesFragment.class, null);
             mTabHost.addTab(mTabHost.newTabSpec("pastgamesfragment").setIndicator("Past"),
                     PastGamesFragment.class, null);
-            mTabHost.addTab(mTabHost.newTabSpec("nearbygamesfragment").setIndicator("Nearby"),
-                    NearbyGamesFragment.class,null);
+            mTabHost.addTab(mTabHost.newTabSpec("highscoresfragment").setIndicator("High Scores"),
+                    HighScoresFragment.class,null);
         }
 
         mTabHost.setCurrentTab(0);

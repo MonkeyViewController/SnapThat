@@ -1,5 +1,6 @@
 package com.monkeyviewcontroller.snapthat;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,11 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Game;
@@ -24,11 +31,14 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class MyFriendsFragment extends Fragment {
 
@@ -40,6 +50,9 @@ public class MyFriendsFragment extends Fragment {
     private FloatingActionButton fab;
     private Boolean[] selected;
     private List<STUser> friends;
+    private int category;
+    private String[] indoorTerms = {"Mouse","Fan", "Cup", "Knife", "Plate", "Table", "Chair", "Sink", "Banana", "Apple", "Peanut Butter"};
+    private String[] outdoorTerms = {"Dog", "Cat", "Tree", "Sign", "Field Goal", "Tennis Ball"};
 
     public static AddFriendsFragment newInstance() {
         AddFriendsFragment fragment = new AddFriendsFragment();
@@ -94,25 +107,123 @@ public class MyFriendsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<STUser.Model> selectedFriends = new ArrayList<>();
+
+                int selectedCount = 0;
                 Log.d("MVC", "Clicked the FAB button");
 
-                for(int i=0; i < selected.length; i++)
-                {
-                    if(selected[i])
-                    {
-                        Log.d("MVC", "Selected : " + friends.get(i).getUsername() + " " + friends.get(i).getObjectId());
-                        selectedFriends.add(friends.get(i).getModel());
-                    }
-                }
-
-                Intent intent = new Intent(getActivity(), CreateGameActivity.class);
-                intent.putExtra("friendsingame", selectedFriends);
-                startActivity(intent);
+                displayGameConfirmationPopup(getSelectedFriends());
             }
         });
 
         return rootView;
+    }
+
+    public ArrayList<STUser> getSelectedFriends()
+    {
+        ArrayList<STUser> temp = new ArrayList<>();
+        for(int i=0; i < selected.length; i++)
+        {
+            if(selected[i])
+            {
+                temp.add(friends.get(i));
+            }
+        }
+        return temp;
+    }
+
+    public ArrayList<String> getParticipantIds()
+    {
+        ArrayList<String> temp = new ArrayList<>();
+        for(STUser st: getSelectedFriends())
+        {
+            temp.add(st.getObjectId());
+        }
+        temp.add(ParseUser.getCurrentUser().getObjectId());
+        return temp;
+    }
+
+    public void displayGameConfirmationPopup(ArrayList<STUser> selectedFriends)
+    {
+        Log.d("MVC", "Displaying Popup");
+
+        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+                .title("Almost There")
+                .customView(R.layout.dialog_creategame, true)
+                .positiveText("Let's Play!")
+                .negativeText("Cancel")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        Log.d("MVC", "Clicked play from dialog. Category: " + category);
+                        registerNewGameWithParse(getParticipantIds(), category);
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                    }
+                }).build();
+
+        ((RadioButton)dialog.findViewById(R.id.radio_indoors)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                if(isChecked)
+                    category = 0;
+                else
+                    category = 1;
+            }
+        });
+
+        if(selectedFriends.size()==1)
+            ((TextView)dialog.findViewById(R.id.tvFriendCount)).setText("1 friend :D");
+        else
+            ((TextView)dialog.findViewById(R.id.tvFriendCount)).setText(selectedFriends.size() + " friends :D");
+
+        dialog.show();
+    }
+
+    private String getRandomSearchItem(int category)
+    {
+        Random r = new Random();
+        if(category==1)
+        {
+            return indoorTerms[r.nextInt(indoorTerms.length)];
+        }
+        else
+        {
+            return outdoorTerms[r.nextInt(outdoorTerms.length)];
+        }
+    }
+
+    private void registerNewGameWithParse(ArrayList<String> participantIds, int category){
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        final String searchItem = getRandomSearchItem(category);
+        params.put("creator", ParseUser.getCurrentUser().getObjectId());
+        params.put("searchItem", searchItem);
+        params.put("participants",participantIds);
+        params.put("submissions", new JSONArray());
+
+        final ProgressDialog pd = new ProgressDialog(getActivity());
+        pd.setTitle("Please wait.");
+        pd.setMessage("The game is being created.");
+        pd.show();
+
+        ParseCloud.callFunctionInBackground("creategame", params, new FunctionCallback<String>() {
+            @Override
+            public void done(String result, com.parse.ParseException e) {
+                pd.dismiss();
+                if (e == null) {
+                    Log.d("MVC", "success in creating game");
+                    Log.d("MVC", result);
+                    Toast.makeText(getActivity(), "The game has started! Snap a " + searchItem + ".", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.d("MVC", "failed to create game");
+                    Log.d("MVC", e.getMessage() + " " + e.getCause());
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     public void loadAllFriends()

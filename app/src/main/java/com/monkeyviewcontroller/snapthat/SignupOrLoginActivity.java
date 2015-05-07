@@ -58,7 +58,7 @@ public class SignupOrLoginActivity extends Activity{
                         if(e!=null) {
                             Toast.makeText(SignupOrLoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         }else {
-                            Toast.makeText(SignupOrLoginActivity.this, ParseUser.getCurrentUser().getUsername(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignupOrLoginActivity.this, "Welcome back, " + ParseUser.getCurrentUser().getUsername(), Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(SignupOrLoginActivity.this, MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
