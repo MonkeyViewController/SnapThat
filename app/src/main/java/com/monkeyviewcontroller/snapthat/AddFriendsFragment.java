@@ -168,6 +168,7 @@ public class AddFriendsFragment extends Fragment {
             HashMap<String, Object> params = new HashMap<String, Object>();
             params.put("user", ParseUser.getCurrentUser().getObjectId());
             params.put("invitee", invitee);
+            params.put("inviter_username", ParseUser.getCurrentUser().getUsername());
 
             ParseCloud.callFunctionInBackground("sendfriendrequest", params, new FunctionCallback<String>() {
                 @Override
