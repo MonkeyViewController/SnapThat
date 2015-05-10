@@ -110,10 +110,13 @@ public class CurrentGamesFragment extends Fragment {
                     } else {
                         lvQueryResults.setAdapter(listAdapter);
                     }
+
+
                 }
             }
         });
     }
+
 
     private void showProgressDialog() {
         llProgressBar.setVisibility(View.VISIBLE);

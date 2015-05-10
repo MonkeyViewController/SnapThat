@@ -7,6 +7,7 @@ import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.Models.Submission;
 import com.parse.Parse;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -20,5 +21,7 @@ public class SnapThatApplication extends Application {
         ParseObject.registerSubclass(Submission.class);
 
         Parse.initialize(this,getString(R.string.parse_app_id), getString(R.string.parse_client_id));
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+
     }
 }

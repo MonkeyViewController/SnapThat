@@ -28,6 +28,7 @@ import com.parse.FunctionCallback;
 import com.parse.ParseACL;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -206,6 +207,7 @@ public class MyFriendsFragment extends Fragment {
         params.put("searchItem", searchItem);
         params.put("participants",participantIds);
         params.put("submissions", new JSONArray());
+        params.put("creatorUsername", ParseUser.getCurrentUser().getUsername());
 
         final ProgressDialog pd = new ProgressDialog(getActivity());
         pd.setTitle("Please wait.");
@@ -218,7 +220,8 @@ public class MyFriendsFragment extends Fragment {
                 pd.dismiss();
                 if (e == null) {
                     Log.d("MVC", "success in creating game");
-                    Log.d("MVC", result);
+                    Log.d("MVC", "Game OID: " + result);
+
                     Toast.makeText(getActivity(), "The game has started! Snap a " + searchItem + ".", Toast.LENGTH_LONG).show();
                 } else {
                     Log.d("MVC", "failed to create game");

@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class LoginActivity extends Activity {
 
@@ -94,6 +96,20 @@ public class LoginActivity extends Activity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("username",ParseUser.getCurrentUser().getUsername());
                         intent.putExtra("objectId", ParseUser.getCurrentUser().getObjectId());
+
+                        //Associate device-installation with user pointer for Push Notifications
+                        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                        installation.put("user",ParseUser.getCurrentUser());
+                        installation.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if(e != null){
+                                    Log.i("MVC","Issue associating device install with user");
+                                    Log.i("MVC", e.getMessage());
+                                }
+                            }
+                        });
+
                         startActivity(intent);
                     }
                 }
