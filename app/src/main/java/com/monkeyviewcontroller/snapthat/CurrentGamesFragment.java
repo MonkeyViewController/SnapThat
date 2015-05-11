@@ -2,6 +2,7 @@ package com.monkeyviewcontroller.snapthat;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -33,6 +34,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,6 +80,12 @@ public class CurrentGamesFragment extends Fragment {
                                     int position, long id)
             {
                 Log.d("MVC", "Checked item at position " + position);
+                //launch SubmissionHistory activity
+                String gameOID =currentGames.get(position).getObjectId();
+
+                Intent intent = new Intent(getActivity(), GameSubmissionsActivity.class);
+                intent.putExtra("gameOID",gameOID);
+                startActivity(intent);
 
             }});
 
