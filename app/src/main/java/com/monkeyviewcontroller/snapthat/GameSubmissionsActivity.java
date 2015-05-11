@@ -6,6 +6,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.monkeyviewcontroller.snapthat.Models.Game;
+import com.monkeyviewcontroller.snapthat.Models.Submission;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GameSubmissionsActivity extends ActionBarActivity {
@@ -18,6 +33,32 @@ public class GameSubmissionsActivity extends ActionBarActivity {
         Intent intent = getIntent();
         String gameOID = intent.getStringExtra("gameOID");
         Log.i("MVC", "Retrieved gameOID: " + gameOID);
+
+        ParseQuery<Game> query = ParseQuery.getQuery("Game");
+        query.getInBackground(gameOID, new GetCallback<Game>() {
+            public void done(Game game, ParseException e) {
+                if (e == null) {
+                    //Populate view with submissions
+                    ParseFile winningImage;
+                    Submission winningSubmission = game.getWinningSubmission();
+                    JSONArray allSubmissions = game.getSubmissions();
+
+                    //Extract images
+                    if(winningSubmission == null){
+                        Log.i("MVC", "Cannot populate winningSubmission, no winner yet.");
+                    }
+                    else{
+                        winningImage = winningSubmission.getPicture();
+                    }
+
+                    List<ParseFile> allImages = new ArrayList<>();
+                    for(int i = 0; i < allSubmissions.length(); i++){
+                        //Get images/usernames out of allSubmissions JSONArray
+
+                    }
+                }
+            }
+        });
     }
 
 
