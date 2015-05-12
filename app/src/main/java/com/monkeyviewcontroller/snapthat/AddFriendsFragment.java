@@ -32,6 +32,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -109,6 +110,7 @@ public class AddFriendsFragment extends Fragment {
                 {
                     Log.d("MVC", "load all requests error: " + e);
                 } else {
+                    Collections.sort(usersRequesting);
                     listAdapter = new FriendRequestListAdapter(getActivity(), usersRequesting);
 
                     if (listAdapter.isEmpty()) {
