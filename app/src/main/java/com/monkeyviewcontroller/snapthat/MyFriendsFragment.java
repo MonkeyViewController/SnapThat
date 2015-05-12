@@ -37,6 +37,7 @@ import org.json.JSONArray;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -247,6 +248,7 @@ public class MyFriendsFragment extends Fragment {
                     Log.d("MVC", "load all friends error: " + e + " " + e.getCause());
                 } else {
                     friends = users;
+                    Collections.sort(friends);
                     listAdapter = new FriendListAdapter(getActivity(), friends, fab);
 
                     if (listAdapter.isEmpty()) {
