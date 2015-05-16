@@ -10,6 +10,7 @@
     <color name="gray_shadow_lite">#B8B8B8</color>
     <color name="black_transparent_80">#CC000000</color>
     <color name="black_transparent_25">#40000000</color>
+    <color name="secondaryText">#727272</color>
 
     <color name="not_background">#E6FF0000</color>
     <color name="not_highlight">#E6FFFFFF</color>
@@ -22,6 +23,7 @@
     <color name="swarm_orange">#ffa44d</color>
 
     <color name="menu_grey">#99333333</color>
+    <color name="ics_blue_dark">#3366E5</color>
     <color name="ics_blue">#33B5E5</color>
     <color name="custom_gray">#2f2f2f</color>
     <color name="custom_green">#05f516</color>

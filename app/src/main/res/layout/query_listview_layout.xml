@@ -22,6 +22,7 @@
         android:background="@android:color/transparent"
 		android:id="@+id/lvQueryResults"
         android:divider="@null"
-        android:dividerHeight="0dp"/>
+        android:dividerHeight="0dp"
+        android:longClickable="true"/>
 
 </LinearLayout>

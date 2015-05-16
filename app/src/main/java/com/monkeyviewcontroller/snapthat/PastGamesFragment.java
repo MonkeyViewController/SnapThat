@@ -1,5 +1,6 @@
 package com.monkeyviewcontroller.snapthat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.monkeyviewcontroller.snapthat.Adapters.PastGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.parse.FunctionCallback;
@@ -51,15 +53,43 @@ public class PastGamesFragment extends Fragment {
 
         loadPastGames();
 
-        //TODO: only show button when 1 item is selected, fade when scrolling, fix when it covers bottom row
         lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id)
             {
                 Log.d("MVC", "Clicked item at position " + position);
-
+                Intent intent = new Intent(getActivity(), GameDetailsActivity.class);
+                intent.putExtra("pastGameId", pastGames.get(position).getObjectId());
+                startActivity(intent);
             }});
+
+        lvQueryResults.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("MVC", "Long press item at position " + position);
+                new MaterialDialog.Builder(getActivity())
+                        .content("Are you sure you would like to report this photo?")
+                        .positiveText("Agree")
+                        .negativeText("Disagree")
+                        .positiveColorRes(R.color.ics_blue)
+                        .negativeColorRes(R.color.ics_blue)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                Log.d("MVC", "Clicked agree from dialog.");
+
+                                //TODO: Implement this. After a certain number of reports, automatically replace url with placeholder photo?
+                            }
+
+                            @Override
+                            public void onNegative(MaterialDialog dialog) {
+                            }
+                        })
+                        .show();
+                return true;
+            }
+        });
 
         return rootView;
     }

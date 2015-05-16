@@ -64,7 +64,7 @@ public class PastGameListAdapter extends ArrayAdapter<Game> {
         viewHolder.tvTermAndWinner.setText(winningGame.getSearchItem() + " [" + winningGame.getWinningSubmission().getCreatorUsername() + "]");
 
         Picasso.with(getContext()).
-                load(winningGame.getWinningSubmission().getPhotoURL())
+                load("https://cms-assets.tutsplus.com/uploads/users/21/posts/19431/featured_image/CodeFeature.jpg")//winningGame.getWinningSubmission().getPhotoURL()
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(viewHolder.ivWinningImage);

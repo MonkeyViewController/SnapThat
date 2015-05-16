@@ -24,6 +24,7 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import com.parse.FunctionCallback;
 import com.parse.ParseACL;
 import com.parse.ParseCloud;
@@ -250,12 +251,14 @@ public class MyFriendsFragment extends Fragment {
                     friends = users;
                     Collections.sort(friends);
                     listAdapter = new FriendListAdapter(getActivity(), friends, fab);
+                    SwingBottomInAnimationAdapter animationAdapter = new SwingBottomInAnimationAdapter(listAdapter);
 
                     if (listAdapter.isEmpty()) {
                         tvEmptyList.setText("No Friends, Go Add Some!");
                         llEmptyList.setVisibility(View.VISIBLE);
                     } else {
-                        lvQueryResults.setAdapter(listAdapter);
+                        animationAdapter.setAbsListView(lvQueryResults);
+                        lvQueryResults.setAdapter(animationAdapter);
                         selected = new Boolean[friends.size()];
                         Arrays.fill(selected, false);
                     }

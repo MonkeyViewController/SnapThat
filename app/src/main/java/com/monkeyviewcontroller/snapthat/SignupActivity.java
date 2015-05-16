@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.monkeyviewcontroller.snapthat.Models.STUser;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -31,6 +32,7 @@ public class SignupActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
         setContentView(R.layout.activity_signup);
 
         etSignupUsername = (EditText) findViewById(R.id.etSignupUsername);

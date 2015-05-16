@@ -9,11 +9,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.R;
@@ -25,24 +29,45 @@ public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
 
     Context context;
     List<STUser> usersRequesting;
+    private TextDrawable mDrawableBuilder;
+    private ColorGenerator mColorGenerator = ColorGenerator.DEFAULT;
+
+    private static class ViewHolder {
+        TextView tvItemTextUsername;
+        ImageView ivAccept;
+        ImageView ivDecline;
+        ImageView ivThumbnail;
+    }
 
     public FriendRequestListAdapter(Context context, List<STUser> objects) {
         super(context, R.layout.list_item_friendrequest, objects);
-        this.context = context;
         this.usersRequesting = objects;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.list_item_friendrequest, parent, false);
 
-        TextView tvItemTextUsername = (TextView) view.findViewById(R.id.tvItemTextUsername);
-        tvItemTextUsername.setText(usersRequesting.get(position).getUsername());
+        final STUser friend = getItem(position);
+        ViewHolder viewHolder;
 
-        ImageButton btnAccept = (ImageButton) view.findViewById(R.id.btnAccept);
-        setViewBackgroundWithoutResettingPadding(btnAccept);
-        btnAccept.setOnClickListener(new View.OnClickListener() {
+        if(convertView == null) {
+            viewHolder = new ViewHolder();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.list_item_friendrequest, parent, false);
+            viewHolder.tvItemTextUsername = (TextView) convertView.findViewById(R.id.tvItemTextUsername);
+            viewHolder.ivAccept = (ImageView) convertView.findViewById(R.id.ivAccept);
+            viewHolder.ivDecline = (ImageView) convertView.findViewById(R.id.ivDecline);
+            viewHolder.ivThumbnail = (ImageView) convertView.findViewById(R.id.ivThumbnail);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        setThumbnail(viewHolder.ivThumbnail, String.valueOf(friend.getWins()));
+        viewHolder.tvItemTextUsername.setText(usersRequesting.get(position).getUsername());
+
+        setViewBackgroundWithoutResettingPadding(viewHolder.ivAccept);
+        viewHolder.ivAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -56,9 +81,8 @@ public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
             }
         });
 
-        ImageButton btnCancel = (ImageButton) view.findViewById(R.id.btnCancel);
-        setViewBackgroundWithoutResettingPadding(btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        setViewBackgroundWithoutResettingPadding(viewHolder.ivDecline);
+        viewHolder.ivDecline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -71,7 +95,16 @@ public class FriendRequestListAdapter extends ArrayAdapter<STUser> {
                 notifyDataSetChanged();
             }
         });
-        return view;
+
+        return convertView;
+    }
+
+    public void setThumbnail(ImageView view, String score) {
+
+        int color = mColorGenerator.getRandomColor();
+        mDrawableBuilder = TextDrawable.builder()
+                .buildRound(score, color);
+        view.setImageDrawable(mDrawableBuilder);
     }
 
     public static void setViewBackgroundWithoutResettingPadding(final View v) {

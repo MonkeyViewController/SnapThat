@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
@@ -29,13 +31,14 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
 
     private FloatingActionButton fab;
     private Boolean[] selected;
+    private TextDrawable mDrawableBuilder;
+    private ColorGenerator mColorGenerator = ColorGenerator.DEFAULT;
 
     private static class ViewHolder {
-        TextView tvWins;
         TextView tvItemTextUsername;
         ImageView ivSettings;
         ImageView ivRemoveFriend;
-        ImageView ivWinsBackground;
+        ImageView ivThumbnail;
         CheckBox cbMyFriends;
     }
 
@@ -57,11 +60,10 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.list_item_friend, parent, false);
-            viewHolder.tvWins = (TextView) convertView.findViewById(R.id.tvWins);
             viewHolder.tvItemTextUsername = (TextView) convertView.findViewById(R.id.tvItemTextUsername);
             viewHolder.ivSettings = (ImageView) convertView.findViewById(R.id.ivSettings);
             viewHolder.ivRemoveFriend = (ImageView) convertView.findViewById(R.id.ivRemoveFriend);
-            viewHolder.ivWinsBackground = (ImageView) convertView.findViewById(R.id.ivWinsBackground);
+            viewHolder.ivThumbnail = (ImageView) convertView.findViewById(R.id.ivThumbnail);
             viewHolder.cbMyFriends = (CheckBox) convertView.findViewById(R.id.cbMyFriends);
             convertView.setTag(viewHolder);
         } else {
@@ -85,8 +87,7 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
         });
 
         viewHolder.cbMyFriends.setChecked(selected[position]);
-
-        viewHolder.tvWins.setText(String.valueOf(friend.getWins()));
+        setThumbnail(viewHolder.ivThumbnail, String.valueOf(friend.getWins()));
         viewHolder.tvItemTextUsername.setText(friend.getUsername());
 
         setViewBackgroundWithoutResettingPadding(viewHolder.ivSettings);
@@ -119,6 +120,14 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
         });
 
         return convertView;
+    }
+
+    public void setThumbnail(ImageView view, String score) {
+
+        int color = mColorGenerator.getRandomColor();
+        mDrawableBuilder = TextDrawable.builder()
+                .buildRound(score, color);
+        view.setImageDrawable(mDrawableBuilder);
     }
 
     public static void setViewBackgroundWithoutResettingPadding(final View v) {

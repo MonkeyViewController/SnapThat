@@ -26,6 +26,7 @@
         android:paddingTop="8dp"
         android:paddingBottom="100dp"
         android:clipToPadding="false"
-        android:choiceMode="multipleChoice"/>
+        android:choiceMode="multipleChoice"
+        android:longClickable="true"/>
 
 </LinearLayout>

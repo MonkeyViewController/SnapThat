@@ -25,9 +25,12 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:appcompat-v7:22.1.1'
     compile files('libs/Parse-1.9.1.jar')
     compile 'com.getbase:floatingactionbutton:1.9.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.afollestad:material-dialogs:0.7.3.2'
+    compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 }

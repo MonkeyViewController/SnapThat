@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.parse.FunctionCallback;
+import com.parse.ParseAnalytics;
 import com.parse.ParseCloud;
 import com.parse.ParseUser;
 
@@ -42,10 +43,8 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
         setContentView(R.layout.activity_main);
-
-        Log.d("MVC", "On Create .....");
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());

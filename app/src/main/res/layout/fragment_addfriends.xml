@@ -48,6 +48,7 @@
         android:textColor="@color/white"/>
 
     <include
+        android:layout_marginTop="8dp"
         layout="@layout/query_listview_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
