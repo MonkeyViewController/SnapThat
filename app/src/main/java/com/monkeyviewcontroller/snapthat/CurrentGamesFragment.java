@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Adapters.FriendListAdapter;
@@ -51,6 +52,7 @@ public class CurrentGamesFragment extends Fragment {
     private TextView tvEmptyList;
     private ListView lvQueryResults;
     private List<Game> currentGames;
+    private PullRefreshLayout layout;
 
     public static CurrentGamesFragment newInstance() {
         CurrentGamesFragment fragment = new CurrentGamesFragment();
@@ -72,7 +74,6 @@ public class CurrentGamesFragment extends Fragment {
         lvQueryResults = (ListView)rootView.findViewById(R.id.lvQueryResults);
         tvEmptyList = (TextView)rootView.findViewById(R.id.tvEmptyList);
 
-        loadAllCurrentGames();
 
         lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -89,10 +90,30 @@ public class CurrentGamesFragment extends Fragment {
 
             }});
 
+        layout = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+
+        //Load Initial list of games
+        loadAllCurrentGames();
+
+        setupPullDownRefresh();
+
         return rootView;
     }
 
+    private void setupPullDownRefresh(){
+        // listen refresh event
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Log.i("MVC", "Pull Down Refresh on Current Games Activated");
 
+                loadAllCurrentGames();
+            }
+        });
+    }
+
+
+    //Pass layout so that we can end the pull down refresh loading animation
     public void loadAllCurrentGames()
     {
         showProgressDialog();
@@ -123,6 +144,8 @@ public class CurrentGamesFragment extends Fragment {
 
 
                 }
+                layout.setRefreshing(false);
+
             }
         });
     }
