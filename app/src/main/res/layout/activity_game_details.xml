@@ -64,7 +64,7 @@
                         android:text="SUBMISSIONS" />
 
                     <ImageView
-                        android:id="@+id/ivFavorite"
+                        android:id="@+id/ivLike"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_favorite_outline_white_24dp"

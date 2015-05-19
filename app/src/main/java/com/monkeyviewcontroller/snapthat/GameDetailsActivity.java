@@ -18,6 +18,7 @@ import com.monkeyviewcontroller.snapthat.Adapters.BasicCommentListAdapter;
 import com.monkeyviewcontroller.snapthat.Adapters.FullCommentListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Comment;
 import com.monkeyviewcontroller.snapthat.Models.Game;
+import com.monkeyviewcontroller.snapthat.Models.Like;
 import com.monkeyviewcontroller.snapthat.Views.ObservableScrollView;
 import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import com.nirhart.parallaxscroll.views.ParallaxScrollView;
@@ -27,6 +28,8 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
@@ -38,7 +41,7 @@ public class GameDetailsActivity extends Activity {
     private String gameId;
     private ImageView ivHeader;
     private TextView tvSubmissions;
-    private ImageView ivFavorite;
+    private ImageView ivLike;
     private TextView tvWinner;
     private TextView tvItem;
     private TextView tvTime;
@@ -54,6 +57,8 @@ public class GameDetailsActivity extends Activity {
     private ListView lvQueryResults;
     private TextView tvDivider;
     private TextView tvCommentStatus;
+    private Like like;
+    private boolean isLiked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +70,14 @@ public class GameDetailsActivity extends Activity {
         getGameId();
         loadGame();
         loadComments();
+        loadLikeStatus();
     }
 
     public void setupViews()
     {
         Log.d("MVC", "setupViews");
         tvSubmissions = (TextView) findViewById(R.id.tvSubmissions);
-        ivFavorite = (ImageView) findViewById(R.id.ivFavorite);
+        ivLike = (ImageView) findViewById(R.id.ivLike);
         tvWinner = (TextView) findViewById(R.id.tvWinner);
         tvItem = (TextView) findViewById(R.id.tvItem);
         tvTime = (TextView) findViewById(R.id.tvTime);
@@ -117,10 +123,36 @@ public class GameDetailsActivity extends Activity {
             }
         });
 
-        ivFavorite.setOnClickListener(new View.OnClickListener() {
+        ivLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("MVC", "Clicked favorite button");
+                Log.d("MVC", "Clicked like button");
+
+                if(isLiked) {
+                    like.deleteInBackground();
+                    ivLike.setImageResource(R.drawable.ic_favorite_outline_white_24dp);
+                    isLiked = false;
+                } else {
+                    like = new Like();
+                    like.forGame(gameId);
+                    like.fromUser(ParseUser.getCurrentUser());
+
+                    like.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+
+                            try {
+                                like.fetchIfNeeded();
+                            } catch (ParseException e1) {
+                                Log.d("MVC", "FetchIfNeeded on like failed.");
+                                e1.printStackTrace();
+                            }
+
+                            ivLike.setImageResource(R.drawable.ic_favorite_white_24dp);
+                            isLiked = true;
+                        }
+                    });
+                }
             }
         });
 
@@ -208,6 +240,39 @@ public class GameDetailsActivity extends Activity {
             }
         });
     }
+
+    //TODO: potentially need to lock this so that a user can not attempt to like before we know the status
+    public void loadLikeStatus()
+    {
+        if(TextUtils.isEmpty(gameId))
+        {
+            Log.d("MVC", "GameId not properly received.");
+            //Tell the user that there are no comments(no ID so we cant get comments)
+            //In reality the user should even be in this screen if the gameId is not valid
+            return;
+        }
+
+        Log.d("MVC", "Loading the like status.");
+        ParseQuery<Like> query = ParseQuery.getQuery("Like");
+        query.whereEqualTo("forGame", ParseObject.createWithoutData("Game", gameId));
+        query.whereEqualTo("fromUser", ParseUser.getCurrentUser());
+
+        query.getFirstInBackground(new GetCallback<Like>() {
+            public void done(Like object, ParseException e) {
+                like = object;
+                if (like == null) {
+                    Log.d("MVC", "The user has NOT liked the game.");
+                    isLiked = false;
+                } else {
+                    Log.d("MVC", "The user HAS liked the game.");
+                    isLiked = true;
+                    ivLike.setImageResource(R.drawable.ic_favorite_white_24dp);
+                }
+            }
+        });
+    }
+
+
 
     private void showProgressDialog() {
         llProgressBar.setVisibility(View.VISIBLE);

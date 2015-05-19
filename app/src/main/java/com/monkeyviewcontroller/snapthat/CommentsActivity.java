@@ -114,6 +114,8 @@ public class CommentsActivity extends Activity {
             c.setGame(gameId);
             c.setCommenter(ParseUser.getCurrentUser());
             c.setMessage(message);
+            c.setDeleted(false);
+            c.setReports(0);
 
             c.saveInBackground(new SaveCallback() {
                 @Override

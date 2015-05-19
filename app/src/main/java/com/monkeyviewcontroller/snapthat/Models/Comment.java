@@ -29,4 +29,16 @@ public class Comment extends ParseObject {
     public STUser getCommenter() { return (STUser)getParseUser("commenter"); }
 
     public void setGame(String game) { put("forGame",  ParseObject.createWithoutData("Game",game)); }
+
+    public void setDeleted(boolean b) {
+        put("deleted", b);
+    }
+
+    public boolean isDeleted() { return getBoolean("deleted"); }
+
+    public void setReports(int count) {
+        put("reports", count);
+    }
+
+    public int getReports() { return getInt("reports"); }
 }
