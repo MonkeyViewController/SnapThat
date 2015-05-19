@@ -2,6 +2,7 @@ package com.monkeyviewcontroller.snapthat;
 
 import android.app.Application;
 
+import com.monkeyviewcontroller.snapthat.Models.Comment;
 import com.monkeyviewcontroller.snapthat.Models.FriendRequest;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
@@ -19,9 +20,9 @@ public class SnapThatApplication extends Application {
         ParseUser.registerSubclass(STUser.class);
         ParseObject.registerSubclass(Game.class);
         ParseObject.registerSubclass(Submission.class);
+        ParseObject.registerSubclass(Comment.class);
 
         Parse.initialize(this,getString(R.string.parse_app_id), getString(R.string.parse_client_id));
         ParseInstallation.getCurrentInstallation().saveInBackground();
-
     }
 }

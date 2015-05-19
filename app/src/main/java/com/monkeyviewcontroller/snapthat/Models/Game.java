@@ -70,10 +70,19 @@ public class Game extends ParseObject {
     public JSONArray getSubmissions(){
         JSONArray submissions = getJSONArray("submissions");
         if(submissions == null){
-            Log.i("MVC", "getSubmissions(), submissions == null");
+            Log.d("MVC", "getSubmissions(), submissions == null");
             return new JSONArray();
         }
         return submissions;
+    }
+
+    public JSONArray getParticipants(){
+        JSONArray participants = getJSONArray("participants");
+        if(participants == null){
+            Log.d("MVC", "getParticipants(), participants == null");
+            return new JSONArray();
+        }
+        return participants;
     }
 
     public void addToSubmissions(Submission submission){

@@ -34,9 +34,9 @@ public class PastGameListAdapter extends ArrayAdapter<Game> {
 
     private static class ViewHolder {
         TextView tvTermAndWinner;
-        //total submissions?(not so relevant because goal is speed so submissions will generally be low)
         //total time taken?
-        //number of players?
+        TextView tvPlayers;
+        TextView tvSubmissions;
         ImageView ivWinningImage;
     }
 
@@ -55,6 +55,8 @@ public class PastGameListAdapter extends ArrayAdapter<Game> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.list_item_pastgame, parent, false);
             viewHolder.tvTermAndWinner = (TextView) convertView.findViewById(R.id.tvTermAndWinner);
+            viewHolder.tvPlayers = (TextView) convertView.findViewById(R.id.tvPlayers);
+            viewHolder.tvSubmissions = (TextView) convertView.findViewById(R.id.tvSubmissions);
             viewHolder.ivWinningImage = (ImageView) convertView.findViewById(R.id.ivWinningImage);
             convertView.setTag(viewHolder);
         } else {
@@ -62,9 +64,11 @@ public class PastGameListAdapter extends ArrayAdapter<Game> {
         }
 
         viewHolder.tvTermAndWinner.setText(winningGame.getSearchItem() + " [" + winningGame.getWinningSubmission().getCreatorUsername() + "]");
+        viewHolder.tvSubmissions.setText(String.valueOf(winningGame.getSubmissions().length()));
+        viewHolder.tvPlayers.setText(String.valueOf(winningGame.getParticipants().length()));
 
         Picasso.with(getContext()).
-                load("https://cms-assets.tutsplus.com/uploads/users/21/posts/19431/featured_image/CodeFeature.jpg")//winningGame.getWinningSubmission().getPhotoURL()
+                load(winningGame.getWinningSubmission().getThumbnailURL())
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
                 .into(viewHolder.ivWinningImage);

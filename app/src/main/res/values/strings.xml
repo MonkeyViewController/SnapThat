@@ -20,6 +20,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_field_comment_length">Comment is too long</string>
     <string name="error_adding_yourself">You can not add yourself</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_create_game">CreateGameActivity</string>
@@ -27,5 +28,5 @@
     <string name="title_activity_game_selection">GameSelectionActivity</string>
     <string name="title_activity_game_details">GameDetailsActivity</string>
     <string name="title_activity_game_submissions">GameSubmissionsActivity</string>
-
+    <string name="title_activity_comments">CommentsActivity</string>
 </resources>

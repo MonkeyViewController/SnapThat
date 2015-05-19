@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="200dp"
+    android:layout_height="150dp"
     android:orientation="horizontal"
     android:padding="5dp">
 
@@ -12,25 +12,47 @@
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:scaleType="centerCrop"/>
+        android:layout_centerVertical="true"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/black_transparent_80"
+        android:background="@color/black_transparent_70"
         android:orientation="vertical"
         android:padding="3dp">
 
         <TextView
             android:id="@+id/tvTermAndWinner"
             style="@style/InPictureTextView"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:singleLine="true"
-            android:gravity="end"/>
+            android:gravity="start"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start">
+
+            <TextView
+                android:id="@+id/tvPlayers"
+                style="@style/InPictureTextView"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_group_white_24dp"
+                android:drawablePadding="5dip"
+                android:paddingLeft="10dp" />
+
+            <TextView
+                android:id="@+id/tvSubmissions"
+                style="@style/InPictureTextView"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_camera_white_24dp"
+                android:drawablePadding="5dip"
+                android:paddingLeft="10dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.Image;
+import android.media.ThumbnailUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -50,6 +51,7 @@ public class PhotoPreviewActivity extends Activity {
     private byte[] photoData;
     private Bitmap bitmap;
     private Bitmap rotatedBitmap;
+    private Bitmap resizedBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +112,22 @@ public class PhotoPreviewActivity extends Activity {
         return bytes;
     }
 
+    public Bitmap getResizedBitmap(Bitmap bm, int desiredWidth) {
+
+        int width = bm.getWidth();
+
+        int height = bm.getHeight();
+
+        float scale = ((float) desiredWidth) / width;
+
+        Matrix matrix = new Matrix();
+
+        matrix.postScale(scale, scale);
+
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        return resizedBitmap;
+    }
+
     private void setPhotoToView() {
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
@@ -126,11 +144,18 @@ public class PhotoPreviewActivity extends Activity {
         // Use matrix to rotate bitmap image
         // to compensate for 90 manual rotation in preview workaround
         rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        Log.d("MVC", "Width: " + bitmap.getWidth() + " height: " + bitmap.getHeight());
         photoImageView.setImageBitmap(rotatedBitmap);
         bitmap.recycle();
     }
 
-    private ParseFile convertPhotoToParseFile(Bitmap rotatedBitmap){
+    private void resizeBitmap()
+    {
+        resizedBitmap = getResizedBitmap(rotatedBitmap, 960);
+        rotatedBitmap.recycle();
+    }
+
+    private ParseFile getParsePictureFile(Bitmap bitmap){
         if(photoData==null)
         {
             Log.d("MVC", "Byte array is null when attempting to save file to parse. Exiting");
@@ -138,23 +163,39 @@ public class PhotoPreviewActivity extends Activity {
             finish();
         }
 
-        //No scaling used atm but should be a consideration
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         byte[] scaledData = bos.toByteArray();
-        ParseFile pictureFile = new ParseFile("submission_photo.jpg",scaledData);
-        rotatedBitmap.recycle();
-        return pictureFile;
+        ParseFile file = new ParseFile("submission_photo.jpg",scaledData);
+        return file;
     }
 
-
+    private ParseFile getParseThumbnailFile(Bitmap bitmap){
+        if(photoData==null)
+        {
+            Log.d("MVC", "Byte array is null when attempting to save file to parse. Exiting");
+            Toast.makeText(PhotoPreviewActivity.this, "SnapThat was not able to submit your photo. Take another Snap and try again.", Toast.LENGTH_LONG).show();
+            finish();
+        }
+        Bitmap thumbnail = ThumbnailUtils.extractThumbnail(bitmap, bitmap.getWidth(), 450);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] scaledData = bos.toByteArray();
+        ParseFile file = new ParseFile("thumbnail_photo.jpg",scaledData);
+        return file;
+    }
 
     private void saveSubmission(){
-        ParseFile pictureFile = convertPhotoToParseFile(rotatedBitmap);
+
+        resizeBitmap();
+        ParseFile pictureFile = getParsePictureFile(resizedBitmap);
+        ParseFile thumbnailFile = getParseThumbnailFile(resizedBitmap);
+        resizedBitmap.recycle();
 
         final Submission newSubmission = new Submission();
 
         newSubmission.setPicture(pictureFile);
+        newSubmission.setThumbnail(thumbnailFile);
         newSubmission.setCreator(ParseUser.getCurrentUser());
         newSubmission.setHasProcessed(false);
         newSubmission.setIsValid(false);

@@ -53,6 +53,10 @@
             android:name=".GameSubmissionsActivity"
             android:label="@string/title_activity_game_submissions" >
         </activity>
+        <activity
+            android:name=".CommentsActivity"
+            android:label="@string/title_activity_comments" >
+        </activity>
     </application>
 
 </manifest>
