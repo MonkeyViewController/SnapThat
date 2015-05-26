@@ -1,8 +1,10 @@
 package com.monkeyviewcontroller.snapthat;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -96,7 +98,6 @@ public class CurrentGamesFragment extends Fragment {
         loadAllCurrentGames();
 
         setupPullDownRefresh();
-
         return rootView;
     }
 
@@ -161,6 +162,16 @@ public class CurrentGamesFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        this.getActivity().registerReceiver(new SyncActivityReceiver(), new IntentFilter("com.monkeyviewcontroller.snapthat"));
+    }
+
+    class SyncActivityReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("push", "sync broadcast received.");
+            loadAllCurrentGames();
+        }
     }
 }
