@@ -169,6 +169,8 @@ public class MyFriendsFragment extends Fragment {
                     }
                 }).build();
 
+        category = 0; //default category selection
+
         ((RadioButton)dialog.findViewById(R.id.radio_indoors)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

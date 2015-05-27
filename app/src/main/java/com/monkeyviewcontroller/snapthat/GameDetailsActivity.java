@@ -198,6 +198,7 @@ public class GameDetailsActivity extends Activity {
         Log.d("MVC", "Loading the comments.");
         ParseQuery<Comment> query = ParseQuery.getQuery("Comment");
         query.whereEqualTo("forGame", ParseObject.createWithoutData("Game", gameId));
+        query.whereEqualTo("deleted", false);
         query.orderByDescending("createdAt");
         query.setLimit(5);
         query.findInBackground(new FindCallback<Comment>() {

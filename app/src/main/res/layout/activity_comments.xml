@@ -5,7 +5,7 @@
     tools:context="com.monkeyviewcontroller.snapthat.CommentsActivity">
 
     <include
-        layout="@layout/query_listview_divider_layout"
+        layout="@layout/query_swipelistview_divider_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

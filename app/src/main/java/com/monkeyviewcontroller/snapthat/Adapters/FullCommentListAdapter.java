@@ -48,6 +48,22 @@ public class FullCommentListAdapter extends ArrayAdapter<Comment> {
     }
 
     @Override
+    public int getViewTypeCount() {
+        // menu type count
+        return 2;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        // current menu type
+        //If the user name of the commenter is us, use menu type 0, else use menu type 1
+        if( weAreCommenter(getItem(position).getCommenter().getUsername()))
+            return 0;
+        else
+            return 1;
+    }
+
+    @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         final Comment comment = getItem(position);
@@ -108,5 +124,10 @@ public class FullCommentListAdapter extends ArrayAdapter<Comment> {
         mDrawableBuilder = TextDrawable.builder()
                 .buildRound(score, color);
         view.setImageDrawable(mDrawableBuilder);
+    }
+
+    private boolean weAreCommenter(String username)
+    {
+        return ParseUser.getCurrentUser().getUsername().equals(username);
     }
 }
