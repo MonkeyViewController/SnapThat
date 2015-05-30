@@ -10,12 +10,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
-        android:src="@drawable/snapthatlogo_large"
+        android:src="@drawable/snapthatlogohorizontal"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="140dp" />
+        android:layout_marginTop="65dp" />
 
-    <Button
+    <!-- <Button
+        android:style="@style/Widget.AppCompat.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Bypass"
@@ -23,9 +24,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="100dp"
-        android:textColor="@color/ics_blue"/>
+        android:textColor="@color/ics_blue"/> -->
 
     <Button
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login_button"
@@ -36,6 +38,7 @@
         android:textColor="@color/ics_blue"/>
 
     <Button
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signup_button"

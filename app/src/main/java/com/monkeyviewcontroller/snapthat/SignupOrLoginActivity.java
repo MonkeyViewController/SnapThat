@@ -47,7 +47,7 @@ public class SignupOrLoginActivity extends Activity{
             }
         });
 
-        btnBypass = (Button)findViewById(R.id.btnBypass);
+        /*btnBypass = (Button)findViewById(R.id.btnBypass);
         btnBypass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +68,6 @@ public class SignupOrLoginActivity extends Activity{
                     }
                 });
             }
-        });
+        });*/
     }
 }
