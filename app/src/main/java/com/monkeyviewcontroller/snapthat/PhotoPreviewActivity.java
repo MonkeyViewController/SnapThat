@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.Image;
 import android.media.ThumbnailUtils;
@@ -18,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.dd.CircularProgressButton;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.Models.Submission;
@@ -45,13 +47,12 @@ import java.util.ArrayList;
 public class PhotoPreviewActivity extends Activity {
 
     private ImageView photoImageView;
-    private ImageButton cancelSubmissionButton;
-    private ImageButton previewConfirmButton;
     private String gameOID;
     private byte[] photoData;
     private Bitmap bitmap;
     private Bitmap rotatedBitmap;
     private Bitmap resizedBitmap;
+    private CircularProgressButton circularButton1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,24 +67,21 @@ public class PhotoPreviewActivity extends Activity {
         photoData = getPhotoData();
         setPhotoToView();
 
-        previewConfirmButton = (ImageButton) findViewById(R.id.previewConfirmButton);
-        previewConfirmButton.setOnClickListener(new View.OnClickListener() {
+        circularButton1 = (CircularProgressButton) findViewById(R.id.circularButton1);
+        circularButton1.setIndeterminateProgressMode(true);
+        circularButton1.setStrokeColor(000000);
+        circularButton1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Log.d("MVC","Confirm Clicked");
-                saveSubmission(); // calls Finish()
-            }
-        });
-
-        cancelSubmissionButton = (ImageButton) findViewById(R.id.cancelSubmissionButton);
-        cancelSubmissionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("MVC", "Cancel Clicked");
-                //Close PhotoPreviewActivity and return to primary view
-                bitmap.recycle();
-                rotatedBitmap.recycle();
-                finish();
+            public void onClick(View v) {
+                if (circularButton1.getProgress() == 0) {
+                    circularButton1.setProgress(50);
+                    Log.d("MVC","Upload Clicked");
+                    saveSubmission(); // calls Finish()
+                } else if (circularButton1.getProgress() == 100) {
+                    circularButton1.setProgress(0);
+                } else {
+                    circularButton1.setProgress(100);
+                }
             }
         });
     }
@@ -224,10 +222,12 @@ public class PhotoPreviewActivity extends Activity {
                         public void done(ParseException e) {
                             if (e == null){
                                 Log.i("MVC", "Submission has been saved successfully");
+                                circularButton1.setProgress(100);
                                 Toast.makeText(PhotoPreviewActivity.this, "Submission Successful!", Toast.LENGTH_LONG).show();
                                 finish();
                             }
                             else {
+                                circularButton1.setProgress(-1);
                                 Toast.makeText(PhotoPreviewActivity.this, "Submission Error!", Toast.LENGTH_LONG).show();
                             }
                         }

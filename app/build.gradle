@@ -35,4 +35,6 @@ dependencies {
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'com.baoyz.pullrefreshlayout:library:1.0.1'
     compile 'com.github.nirhart:parallaxscroll:1.0'
+    compile 'com.github.dmytrodanylyk.circular-progress-button:library:1.1.3'
+
 }
