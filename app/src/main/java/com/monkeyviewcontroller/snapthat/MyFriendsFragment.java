@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -161,7 +162,16 @@ public class MyFriendsFragment extends Fragment {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
                         Log.d("MVC", "Clicked play from dialog. Category: " + category);
-                        registerNewGameWithParse(getParticipantIds(), category);
+                        EditText searchTermInput = (EditText) dialog.findViewById(R.id.requestedSearchTerm);
+                        String requestedSearchTerm = searchTermInput.getText().toString();
+                        //Controls if we need to autoassign search term
+                        if (requestedSearchTerm == null || requestedSearchTerm.equals("")) {
+                            //user did not provide search term
+                            registerNewGameWithParse(getParticipantIds(), category, "");
+                        } else {
+                            //user provided search term
+                            registerNewGameWithParse(getParticipantIds(), category, requestedSearchTerm);
+                        }
                     }
 
                     @Override
@@ -203,10 +213,16 @@ public class MyFriendsFragment extends Fragment {
         }
     }
 
-    private void registerNewGameWithParse(ArrayList<String> participantIds, int category){
+    private void registerNewGameWithParse(ArrayList<String> participantIds, int category, String userProvidedSearchTerm){
 
         HashMap<String, Object> params = new HashMap<String, Object>();
-        final String searchItem = getRandomSearchItem(category);
+        final String searchItem;
+        if(userProvidedSearchTerm == ""){
+            searchItem = getRandomSearchItem(category);
+        }
+        else{
+            searchItem = userProvidedSearchTerm;
+        }
         params.put("creator", ParseUser.getCurrentUser().getObjectId());
         params.put("searchItem", searchItem);
         params.put("participants",participantIds);
