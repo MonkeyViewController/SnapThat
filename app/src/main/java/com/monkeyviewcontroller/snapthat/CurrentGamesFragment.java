@@ -84,11 +84,11 @@ public class CurrentGamesFragment extends Fragment {
             {
                 Log.d("MVC", "Checked item at position " + position);
                 //launch SubmissionHistory activity
-                String gameOID =currentGames.get(position).getObjectId();
-
-                Intent intent = new Intent(getActivity(), GameSubmissionsActivity.class);
-                intent.putExtra("gameOID",gameOID);
-                startActivity(intent);
+//                String gameOID =currentGames.get(position).getObjectId();
+//
+//                Intent intent = new Intent(getActivity(), GameSubmissionsActivity.class);
+//                intent.putExtra("gameOID",gameOID);
+//                startActivity(intent);
 
             }});
 
