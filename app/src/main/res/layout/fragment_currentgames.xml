@@ -10,10 +10,10 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.baoyz.widget.PullRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <!--<com.baoyz.widget.PullRefreshLayout-->
+            <!--android:id="@+id/swipeRefreshLayout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
             <!-- ListView、ScrollView、RecyclerView、Other -->
 
@@ -22,7 +22,7 @@
                 layout="@layout/query_listview_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </com.baoyz.widget.PullRefreshLayout>
+        <!--</com.baoyz.widget.PullRefreshLayout>-->
 
 
     </LinearLayout>

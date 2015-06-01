@@ -54,7 +54,7 @@ public class CurrentGamesFragment extends Fragment {
     private TextView tvEmptyList;
     private ListView lvQueryResults;
     private List<Game> currentGames;
-    private PullRefreshLayout layout;
+    //private PullRefreshLayout layout;
 
     public static CurrentGamesFragment newInstance() {
         CurrentGamesFragment fragment = new CurrentGamesFragment();
@@ -92,26 +92,26 @@ public class CurrentGamesFragment extends Fragment {
 
             }});
 
-        layout = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        //layout = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
 
         //Load Initial list of games
         loadAllCurrentGames();
 
-        setupPullDownRefresh();
+        //setupPullDownRefresh();
         return rootView;
     }
 
-    private void setupPullDownRefresh(){
-        // listen refresh event
-        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.i("MVC", "Pull Down Refresh on Current Games Activated");
-
-                loadAllCurrentGames();
-            }
-        });
-    }
+//    private void setupPullDownRefresh(){
+//        // listen refresh event
+//        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                Log.i("MVC", "Pull Down Refresh on Current Games Activated");
+//
+//                loadAllCurrentGames();
+//            }
+//        });
+//    }
 
 
     //Pass layout so that we can end the pull down refresh loading animation
@@ -145,7 +145,7 @@ public class CurrentGamesFragment extends Fragment {
 
 
                 }
-                layout.setRefreshing(false);
+                //layout.setRefreshing(false);
 
             }
         });
