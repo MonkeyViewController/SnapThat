@@ -54,12 +54,6 @@ public class CurrentGamesFragment extends Fragment {
     private TextView tvEmptyList;
     private ListView lvQueryResults;
     private List<Game> currentGames;
-    //private PullRefreshLayout layout;
-
-    public static CurrentGamesFragment newInstance() {
-        CurrentGamesFragment fragment = new CurrentGamesFragment();
-        return fragment;
-    }
 
     public CurrentGamesFragment() {
     }
@@ -76,46 +70,21 @@ public class CurrentGamesFragment extends Fragment {
         lvQueryResults = (ListView)rootView.findViewById(R.id.lvQueryResults);
         tvEmptyList = (TextView)rootView.findViewById(R.id.tvEmptyList);
 
-
         lvQueryResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id)
             {
-                Log.d("MVC", "Checked item at position " + position);
-                //launch SubmissionHistory activity
-//                String gameOID =currentGames.get(position).getObjectId();
-//
-//                Intent intent = new Intent(getActivity(), GameSubmissionsActivity.class);
-//                intent.putExtra("gameOID",gameOID);
-//                startActivity(intent);
+                Log.d("MVC", "Touched item at position " + position);
 
             }});
 
-        //layout = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        loadCurrentGames();
 
-        //Load Initial list of games
-        loadAllCurrentGames();
-
-        //setupPullDownRefresh();
         return rootView;
     }
 
-//    private void setupPullDownRefresh(){
-//        // listen refresh event
-//        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                Log.i("MVC", "Pull Down Refresh on Current Games Activated");
-//
-//                loadAllCurrentGames();
-//            }
-//        });
-//    }
-
-
-    //Pass layout so that we can end the pull down refresh loading animation
-    public void loadAllCurrentGames()
+    public void loadCurrentGames()
     {
         showProgressDialog();
 
@@ -143,14 +112,10 @@ public class CurrentGamesFragment extends Fragment {
                         lvQueryResults.setAdapter(listAdapter);
                     }
 
-
                 }
-                //layout.setRefreshing(false);
-
             }
         });
     }
-
 
     private void showProgressDialog() {
         llProgressBar.setVisibility(View.VISIBLE);
@@ -171,7 +136,7 @@ public class CurrentGamesFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i("push", "sync broadcast received.");
-            loadAllCurrentGames();
+            loadCurrentGames();
         }
     }
 }

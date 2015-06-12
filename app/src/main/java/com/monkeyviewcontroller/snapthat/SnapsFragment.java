@@ -67,8 +67,6 @@ public class SnapsFragment extends Fragment {
         Camera.PictureCallback mPicture = setupImageCapture();
 
         setupCaptureButton(mPicture);
-        setupFriendsButton(mPicture);
-        setupGamesButton(mPicture);
         setupActiveGamesButton(mPicture);
         setupSelectedTermTextView();
         setupTermsDropdown();
@@ -205,33 +203,6 @@ public class SnapsFragment extends Fragment {
                     return;
 
                 mCamera.takePicture(null, null, mPicture);
-            }
-        });
-    }
-
-    private void setupFriendsButton(final Camera.PictureCallback mPicture){
-        ImageButton friendsButton = (ImageButton) rootView.findViewById(R.id.friends_button);
-
-        friendsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("MVC", "Friends Button Clicked");
-                ViewPager vp = (ViewPager) getActivity().findViewById(R.id.pager);
-                vp.setCurrentItem(0, true);
-
-            }
-        });
-    }
-
-    private void setupGamesButton(final Camera.PictureCallback mPicture){
-        ImageButton gamesButton = (ImageButton) rootView.findViewById(R.id.games_button);
-
-        gamesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("MVC", "Games Button Clicked");
-                ViewPager vp = (ViewPager) getActivity().findViewById(R.id.pager);
-                vp.setCurrentItem(2, true);
             }
         });
     }

@@ -64,17 +64,6 @@ public class CurrentGameListAdapter extends ArrayAdapter<Game> {
         Date temp = currentGame.getCreatedDate();
         viewHolder.tvItemDate.setText(temp.getMonth() + "/" + temp.getDay() + "/" + (temp.getYear()+1900));
 
-        viewHolder.ivGoToSnap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Log.d("MVC", "Clicking go to snap button");
-                ((Activity)getContext()).getIntent().putExtra("selectedTermIndex", position);
-                ViewPager vp = (ViewPager)((Activity)getContext()).findViewById(R.id.pager);
-                vp.setCurrentItem(1, true);
-            }
-        });
-
         return convertView;
     }
 

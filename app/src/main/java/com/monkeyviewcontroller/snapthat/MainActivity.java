@@ -5,40 +5,51 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.support.design.widget.NavigationView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.parse.FunctionCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends AppCompatActivity {
 
-    SectionsPagerAdapter mSectionsPagerAdapter;
-
-    ViewPager mViewPager;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,48 +57,104 @@ public class MainActivity extends FragmentActivity {
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
         setContentView(R.layout.activity_main);
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
+
+        TextView tvNavUsername = (TextView)navigationView.findViewById(R.id.nav_username);
+        tvNavUsername.setText(ParseUser.getCurrentUser().getUsername());
+
+        setFragment(TabbedFragment.newInstance(1)); //set the Friends viewpager as the initial view
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public void setFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .commit();
+    }
 
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+                        setSelectedFragment(menuItem.getItemId());
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+    }
+
+    public void setSelectedFragment(int position) {
+        Fragment fragment = null;
+
+        switch (position) {
+            case R.id.nav_friends:
+                fragment = TabbedFragment.newInstance(0);
+                break;
+            case R.id.nav_snap:
+                fragment = new SnapsFragment();
+                break;
+            case R.id.nav_games:
+                fragment = TabbedFragment.newInstance(1);
+                break;
+            /*case 3:
+                fragment = new ActivityFragment();
+                break;
+            case 4:
+                fragment = new SettingsFragment();
+                break;*/
+            case R.id.nav_logout:
+                logout();
+                break;
+            default:
+                fragment = TabbedFragment.newInstance(0);
         }
 
-        @Override
-        public Fragment getItem(int position) {
-
-            if(position==0)
-                return TabbedFragment.newInstance(0);
-            else if(position==1)
-                return SnapsFragment.newInstance();
-            else if(position==2)
-                return TabbedFragment.newInstance(1);
-            else
-                return PlaceholderFragment.newInstance();
+        if (fragment != null) {
+            setFragment(fragment);
         }
+    }
 
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
+    public void logout()
+    {
+        new MaterialDialog.Builder(this)
+                .content("Log Out?")
+                .positiveText("Yes")
+                .negativeText("No")
+                .positiveColorRes(R.color.ics_blue)
+                .negativeColorRes(R.color.ics_blue)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        Log.d("MVC", "Yes agree from dialog.");
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-            }
-            return null;
-        }
+                        ParseUser.logOut();
+                        Intent intent = new Intent(MainActivity.this, SignupOrLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                    }
+                })
+                .show();
     }
 }

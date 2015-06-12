@@ -31,11 +31,6 @@ public class PastGamesFragment extends Fragment {
     private ListView lvQueryResults;
     private List<Game> pastGames;
 
-    public static PastGamesFragment newInstance() {
-        PastGamesFragment fragment = new PastGamesFragment();
-        return fragment;
-    }
-
     public PastGamesFragment() {
     }
 
@@ -117,9 +112,12 @@ public class PastGamesFragment extends Fragment {
 
                     if (listAdapter.isEmpty()) {
                         //TODO: add a button that when clicked moves to the current games fragment
+                        Log.d("MVC", "past games are empty");
                         tvEmptyList.setText("No Games Are Finished!");
                         llEmptyList.setVisibility(View.VISIBLE);
                     } else {
+                        Log.d("MVC", "past games are not empty, " + listAdapter.getCount() + " " + lvQueryResults.getCount());
+
                         lvQueryResults.setAdapter(listAdapter);
                     }
                 }
