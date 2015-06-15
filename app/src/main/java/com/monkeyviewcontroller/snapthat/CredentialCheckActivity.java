@@ -16,12 +16,6 @@ public class CredentialCheckActivity extends Activity {
 
         if(ParseUser.getCurrentUser() != null){
 
-            /*try {
-                ParseUser.getCurrentUser().fetchIfNeeded();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }*/
-
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

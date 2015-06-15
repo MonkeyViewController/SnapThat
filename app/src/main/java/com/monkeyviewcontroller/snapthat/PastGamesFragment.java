@@ -15,8 +15,11 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.monkeyviewcontroller.snapthat.Adapters.PastGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Game;
+import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.HashMap;
@@ -102,13 +105,13 @@ public class PastGamesFragment extends Fragment {
             public void done(List<Game> games, com.parse.ParseException e) {
                 hideProgressDialog();
 
-                if(e!=null) {
+                if(e != null)
+                {
                     Log.d("MVC", "get past games error: " + e + " " + e.getCause());
-                }
-                else {
+                } else {
                     Log.d("MVC", "got the past games");
                     pastGames = games;
-                    listAdapter = new PastGameListAdapter(getActivity(), games);
+                    listAdapter = new PastGameListAdapter(getActivity(), pastGames);
 
                     if (listAdapter.isEmpty()) {
                         //TODO: add a button that when clicked moves to the current games fragment
@@ -116,8 +119,6 @@ public class PastGamesFragment extends Fragment {
                         tvEmptyList.setText("No Games Are Finished!");
                         llEmptyList.setVisibility(View.VISIBLE);
                     } else {
-                        Log.d("MVC", "past games are not empty, " + listAdapter.getCount() + " " + lvQueryResults.getCount());
-
                         lvQueryResults.setAdapter(listAdapter);
                     }
                 }

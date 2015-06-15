@@ -53,6 +53,8 @@ public class Submission extends ParseObject {
         put("creator", value);
     }
 
+    public ParseUser getCreator() { return  getParseUser("creator"); }
+
     public String getCreatorUsername() { return getParseUser("creator").getUsername(); }
 
     public boolean getIsValid(){

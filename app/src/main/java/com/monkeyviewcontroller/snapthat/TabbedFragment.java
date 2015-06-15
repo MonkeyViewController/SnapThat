@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTabHost;
 
 import android.support.v4.view.ViewPager;
@@ -45,12 +46,6 @@ public class TabbedFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_viewpager,container, false);
 
-        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setSupportActionBar(toolbar);
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_menu);
-
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         if (viewPager != null) {
             Bundle bundle = this.getArguments();
@@ -80,11 +75,11 @@ public class TabbedFragment extends Fragment {
             adapter.addFragment(new PastGamesFragment(), "Past");
             adapter.addFragment(new HighScoresFragment(), "Leaderboard");
         }
-
+        //adapter.addFragment(new SnapsFragment(), "Current");
         viewPager.setAdapter(adapter);
     }
 
-    static class Adapter extends FragmentPagerAdapter {
+    static class Adapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
         private final List<String> mFragmentTitles = new ArrayList<>();
 

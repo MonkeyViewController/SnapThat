@@ -111,7 +111,6 @@ public class CurrentGamesFragment extends Fragment {
                     } else {
                         lvQueryResults.setAdapter(listAdapter);
                     }
-
                 }
             }
         });

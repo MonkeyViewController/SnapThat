@@ -37,27 +37,15 @@
                 android:background="@color/black_transparent_25"/>
 
             <ImageButton
-                android:id="@+id/games_button"
+                android:id="@+id/activegames_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="15dp"
                 android:layout_marginRight="20dp"
-                android:src="@drawable/ic_view_list_white_24dp"
-                android:background="@drawable/circle_button"
-                />
-
-            <ImageButton
-                android:id="@+id/friends_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/ic_group_white_24dp"
-                android:background="@drawable/circle_button"
+                android:src="@drawable/ic_arrow_drop_down_white_24dp"
+                android:background="@drawable/rounded_rect_button"
                 />
 
             <ImageButton
@@ -69,18 +57,6 @@
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/ic_camera_white_24dp"
                 android:background="@drawable/red_circle_button"
-                />
-
-            <ImageButton
-                android:id="@+id/activegames_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_above="@id/games_button"
-                android:layout_marginBottom="15dp"
-                android:layout_marginRight="20dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_arrow_drop_down_white_24dp"
-                android:background="@drawable/circle_button"
                 />
 
         </RelativeLayout>

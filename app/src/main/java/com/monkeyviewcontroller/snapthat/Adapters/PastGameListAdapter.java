@@ -25,6 +25,7 @@ import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.STUser;
 import com.monkeyviewcontroller.snapthat.R;
 import com.parse.ParseCloud;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
@@ -61,6 +62,12 @@ public class PastGameListAdapter extends ArrayAdapter<Game> {
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        try {
+            winningGame.getWinningSubmission().getCreator().fetchIfNeeded().getUsername();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
         viewHolder.tvTermAndWinner.setText(winningGame.getSearchItem() + " [" + winningGame.getWinningSubmission().getCreatorUsername() + "]");

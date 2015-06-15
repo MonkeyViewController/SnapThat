@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
@@ -57,16 +58,24 @@ public class MainActivity extends AppCompatActivity {
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        final ActionBar ab = getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_action_menu);
+        ab.setDisplayHomeAsUpEnabled(true);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
 
-        TextView tvNavUsername = (TextView)navigationView.findViewById(R.id.nav_username);
-        tvNavUsername.setText(ParseUser.getCurrentUser().getUsername());
+        //TextView tvNavUsername = (TextView)navigationView.findViewById(R.id.nav_username);
+        //tvNavUsername.setText(ParseUser.getCurrentUser().getUsername());
 
-        setFragment(TabbedFragment.newInstance(1)); //set the Friends viewpager as the initial view
+        //setFragment(TabbedFragment.newInstance(0)); //set the Friends viewpager as the initial view
+        setFragment(new PastGamesFragment());
     }
 
     public void setFragment(Fragment fragment) {
