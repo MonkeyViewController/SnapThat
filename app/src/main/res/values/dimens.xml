@@ -9,4 +9,6 @@
     <dimen name="baseline_margin_unit">16dp</dimen>
     <dimen name="baseline_content_unit">16dp</dimen>
     <dimen name="baseline_content_left">36dp</dimen>
+    <dimen name="detail_backdrop_height">256dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

@@ -1,5 +1,9 @@
 package com.monkeyviewcontroller.snapthat;
 
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,8 +16,11 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,8 +30,9 @@ import android.widget.ImageView;
 import android.widget.ListPopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.view.SurfaceHolder.Callback;
 
-import com.monkeyviewcontroller.snapthat.Adapters.CurrentGameListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.parse.FunctionCallback;
 import com.parse.ParseCloud;
@@ -44,11 +52,15 @@ public class SnapsFragment extends Fragment {
     private ListPopupWindow listPopupWindow;
     private Camera mCamera;
     private CameraPreview mPreview;
+    private SurfaceView surfaceView;
+    private SurfaceHolder holder;
     private View rootView;
     private  List<Game> currentGames;
     private int selectedTermIndex;
     private TextView tvSelectedTerm;
     private ImageButton activeGamesButton;
+    private static final int RED = 0xffFF8080;
+    private static final int WHITE = 0xffFFFFFF;
 
     public static SnapsFragment newInstance() {
         SnapsFragment fragment = new SnapsFragment();
@@ -62,6 +74,7 @@ public class SnapsFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d("MVC", "Creating the snap tab");
         rootView = inflater.inflate(R.layout.fragment_snaps, container, false);
+
         safeCameraOpenInView(rootView);
 
         Camera.PictureCallback mPicture = setupImageCapture();
@@ -76,7 +89,7 @@ public class SnapsFragment extends Fragment {
         return rootView;
     }
 
-    @Override
+    /*@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
@@ -93,9 +106,22 @@ public class SnapsFragment extends Fragment {
         else {
             Log.d("MVC", "Snapsfragment is not visible");
         }
+    }*/
+
+    public void openCamera()
+    {
+        if (mCamera == null) {
+            try {
+                mCamera = Camera.open();
+            } catch (Exception e) {
+                Log.d("MVC", "No camera with exception: " + e.getMessage());
+                Toast.makeText(getActivity(), "No camera detected",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
-    private void setTermTextViewFromIndex(final int index)
+    /*private void setTermTextViewFromIndex(final int index)
     {
         if(index == -1)
             return;
@@ -121,7 +147,7 @@ public class SnapsFragment extends Fragment {
                 }
             }
         });
-    }
+    }*/
 
     private void setupSelectedTermTextView()
     {
@@ -136,13 +162,13 @@ public class SnapsFragment extends Fragment {
         Log.d("MVC", "Setting up dropdown");
 
         listPopupWindow = new ListPopupWindow(getActivity());
-        listPopupWindow.setAnchorView(activeGamesButton);
+        listPopupWindow.setAnchorView(surfaceView);
 
         listPopupWindow.setWidth((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics()));
         listPopupWindow.setHeight((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics()));
         listPopupWindow.setModal(true);
-        //listPopupWindow.setHorizontalOffset(-20);
-        //listPopupWindow.setVerticalOffset(-40);
+        listPopupWindow.setHorizontalOffset((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 198, getResources().getDisplayMetrics()));
+        listPopupWindow.setVerticalOffset((int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -260, getResources().getDisplayMetrics()));
 
         listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -199,8 +225,24 @@ public class SnapsFragment extends Fragment {
                 Log.d("Camera", "Capture Button Clicked");
 
                 //If the user has not selected a game, do not allow them to take a photo.
-                if(selectedTermIndex == -1)
+                if(selectedTermIndex == -1) {
+                    ValueAnimator colorAnim = ObjectAnimator.ofInt(tvSelectedTerm, "textColor", WHITE, RED);
+                    colorAnim.setDuration(250);
+                    colorAnim.setEvaluator(new ArgbEvaluator());
+                    colorAnim.setRepeatCount(3);
+                    colorAnim.setRepeatMode(ValueAnimator.REVERSE);
+
+                    /*AnimatorSet scaleDown = new AnimatorSet();
+
+                    ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(tvSelectedTerm, "scaleX", 1.2f);
+                    ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(tvSelectedTerm, "scaleY", 1.2f);
+                    scaleUpX.setDuration(300);
+                    scaleUpY.setDuration(300);
+
+                    scaleDown.play(scaleUpX).with(scaleUpY);*/
+                    colorAnim.start();
                     return;
+                }
 
                 mCamera.takePicture(null, null, mPicture);
             }
@@ -240,25 +282,46 @@ public class SnapsFragment extends Fragment {
             }
         });
     }
-
     public boolean safeCameraOpenInView(View view)
     {
         boolean qOpened = false;
         releaseCameraAndPreview();
         mCamera = getCameraInstance();
         qOpened = (mCamera != null);
-        mPreview = new CameraPreview(getActivity().getBaseContext(), mCamera);
-        FrameLayout preview = (FrameLayout) view.findViewById(R.id.camera_preview);
-        preview.addView(mPreview);
+        surfaceView = (SurfaceView) view.findViewById(R.id.camera_surface_view);
+        holder = surfaceView.getHolder();
+        holder.addCallback(new Callback() {
+
+            public void surfaceCreated(SurfaceHolder holder) {
+                try {
+                    if (mCamera != null) {
+                        mCamera.setDisplayOrientation(90);
+                        mCamera.setPreviewDisplay(holder);
+                        mCamera.startPreview();
+                    }
+                } catch (IOException e) {
+                    Log.d("MVC", "\"Error setting up preview",e);
+                }
+            }
+
+            public void surfaceChanged(SurfaceHolder holder, int format,
+                                       int width, int height) {
+                // nothing to do here
+            }
+
+            public void surfaceDestroyed(SurfaceHolder holder) {
+                holder.removeCallback(this);
+            }
+        });
         return qOpened;
     }
+
 
     private void releaseCameraAndPreview() {
 
         if (mCamera != null) {
             mCamera.release();
             mCamera = null;
-            mPreview.getHolder().removeCallback(mPreview);
         }
     }
 
@@ -286,4 +349,24 @@ public class SnapsFragment extends Fragment {
         safeCameraOpenInView(rootView);
     }
 
-   }
+    /*@Override
+    public void onResume() {
+        super.onResume();
+        Log.d("MVC", "snapOnResume");
+        openCamera();
+
+        if(mCamera !=null)
+            mCamera.startPreview();
+    }
+
+    @Override
+    public void onPause() {
+        Log.d("MVC", "snapOnPause");
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.setPreviewCallback(null);
+            mCamera.release();
+        }
+        super.onPause();
+    }*/
+}

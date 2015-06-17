@@ -9,8 +9,12 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.Image;
 import android.media.ThumbnailUtils;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,7 +48,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class PhotoPreviewActivity extends Activity {
+public class PhotoPreviewActivity extends AppCompatActivity {
 
     private ImageView photoImageView;
     private String gameOID;
@@ -58,6 +62,12 @@ public class PhotoPreviewActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_preview);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        final ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         gameOID = intent.getStringExtra("selectedGameOID");
@@ -84,6 +94,17 @@ public class PhotoPreviewActivity extends Activity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private byte[] getPhotoData()

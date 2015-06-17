@@ -5,38 +5,59 @@
     android:layout_height="match_parent"
     tools:context="com.monkeyviewcontroller.snapthat.PhotoPreviewActivity">
 
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/photoImageView"
-        android:scaleType="fitXY"
-        />
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
-        >
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <com.dd.CircularProgressButton
-            android:id="@+id/circularButton1"
-            android:layout_width="196dp"
-            android:layout_height="64dp"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/cpb_white"
-            android:textSize="18sp"
-            app:cpb_textComplete="Complete"
-            app:cpb_textError="Error"
-            app:cpb_textIdle="Upload"
-            app:cpb_selectorIdle="@drawable/idle_state_selector"
-            app:cpb_selectorComplete="@drawable/complete_state_selector"
-            app:cpb_cornerRadius="48dp"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/photoImageView"
+            android:scaleType="fitXY"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="40dp"
+            >
+
+            <com.dd.CircularProgressButton
+                android:id="@+id/circularButton1"
+                android:layout_width="196dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/cpb_white"
+                android:textSize="18sp"
+                app:cpb_textComplete="Complete"
+                app:cpb_textError="Error"
+                app:cpb_textIdle="Upload"
+                app:cpb_selectorIdle="@drawable/idle_state_selector"
+                app:cpb_selectorComplete="@drawable/complete_state_selector"
+                app:cpb_cornerRadius="48dp"/>
 
 
         </LinearLayout>
 
+    </LinearLayout>
 
 </RelativeLayout>

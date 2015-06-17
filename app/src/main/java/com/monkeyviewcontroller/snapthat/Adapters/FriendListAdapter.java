@@ -30,7 +30,7 @@ import com.parse.ParseUser;
 public class FriendListAdapter extends ArrayAdapter<STUser> {
 
     private FloatingActionButton fab;
-    private Boolean[] selected;
+    private boolean[] selected;
     private TextDrawable mDrawableBuilder;
     private ColorGenerator mColorGenerator = ColorGenerator.DEFAULT;
 
@@ -46,7 +46,7 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
         super(context, R.layout.list_item_friend, objects);
         this.fab = fab;
 
-        selected = new Boolean[objects.size()];
+        selected = new boolean[objects.size()];
         Arrays.fill(selected, false);
     }
 
@@ -120,6 +120,11 @@ public class FriendListAdapter extends ArrayAdapter<STUser> {
         });
 
         return convertView;
+    }
+
+    public boolean[] getSelected()
+    {
+        return selected;
     }
 
     public void setThumbnail(ImageView view, String score) {

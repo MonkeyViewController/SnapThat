@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,11 +51,17 @@ public class MyFriendsFragment extends Fragment {
     private LinearLayout llEmptyList;
     private FriendListAdapter listAdapter;
     private TextView tvEmptyList;
+    private TextView tvSearchItem;
+    private EditText etSearchItem;
+    private RadioGroup rgWordType;
+    private TextView tvWordType;
     private ListView lvQueryResults;
     private FloatingActionButton fab;
     private Boolean[] selected;
     private List<STUser> friends;
-    private int category;
+    private int gameMode = 0;
+    private int wordChoice = 0;
+    private int gameCategory = 0;
     private String[] indoorTerms = {"Mouse","Fan", "Cup", "Knife", "Plate", "Table", "Chair", "Sink", "Banana", "Apple", "Peanut Butter"};
     private String[] outdoorTerms = {"Dog", "Cat", "Tree", "Sign", "Field Goal", "Tennis Ball"};
 
@@ -77,7 +84,7 @@ public class MyFriendsFragment extends Fragment {
         llEmptyList = (LinearLayout)rootView.findViewById(R.id.llEmptyList);
         lvQueryResults = (ListView)rootView.findViewById(R.id.lvQueryResults);
         tvEmptyList = (TextView)rootView.findViewById(R.id.tvEmptyList);
-        fab = (FloatingActionButton)rootView.findViewById(R.id.pink_icon);
+        fab = (FloatingActionButton)rootView.findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
 
         loadAllFriends();
@@ -104,6 +111,7 @@ public class MyFriendsFragment extends Fragment {
                     if(b)
                     {
                         fab.setVisibility(View.VISIBLE);
+                        break;
                     }
                 }
         }});
@@ -112,9 +120,7 @@ public class MyFriendsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                int selectedCount = 0;
                 Log.d("MVC", "Clicked the FAB button");
-
                 displayGameConfirmationPopup(getSelectedFriends());
             }
         });
@@ -125,9 +131,10 @@ public class MyFriendsFragment extends Fragment {
     public ArrayList<STUser> getSelectedFriends()
     {
         ArrayList<STUser> temp = new ArrayList<>();
-        for(int i=0; i < selected.length; i++)
+        boolean [] btemp = listAdapter.getSelected();
+        for(int i=0; i < btemp.length; i++)
         {
-            if(selected[i])
+            if(btemp[i])
             {
                 temp.add(friends.get(i));
             }
@@ -148,9 +155,9 @@ public class MyFriendsFragment extends Fragment {
 
     public void displayGameConfirmationPopup(ArrayList<STUser> selectedFriends)
     {
-        Log.d("MVC", "Displaying Popup");
+        Log.d("MVC", "Displaying Popup, " + selectedFriends.size() + " friends.");
 
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
+        final MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
                 .title("Almost There")
                 .customView(R.layout.dialog_creategame, true)
                 .positiveText("Let's Play!")
@@ -161,17 +168,21 @@ public class MyFriendsFragment extends Fragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        Log.d("MVC", "Clicked play from dialog. Category: " + category);
+                        Log.d("MVC", "Clicked play from dialog.");
+                        Log.d("MVC", "Game Mode: " + gameMode);
+                        Log.d("MVC", "Game Category: " + gameCategory);
+                        Log.d("MVC", "Word Choice: " + wordChoice);
+                        /*
                         EditText searchTermInput = (EditText) dialog.findViewById(R.id.requestedSearchTerm);
                         String requestedSearchTerm = searchTermInput.getText().toString();
                         //Controls if we need to autoassign search term
                         if (requestedSearchTerm == null || requestedSearchTerm.equals("")) {
                             //user did not provide search term
-                            registerNewGameWithParse(getParticipantIds(), category, "");
+                            registerNewGameWithParse(getParticipantIds(), gameCategory, "");
                         } else {
                             //user provided search term
-                            registerNewGameWithParse(getParticipantIds(), category, requestedSearchTerm);
-                        }
+                            registerNewGameWithParse(getParticipantIds(), gameCategory, requestedSearchTerm);
+                        }*/
                     }
 
                     @Override
@@ -179,16 +190,61 @@ public class MyFriendsFragment extends Fragment {
                     }
                 }).build();
 
-        category = 0; //default category selection
+        gameCategory = 0; //default category selection
+        gameMode = 0;
+        wordChoice = 0;
 
-        ((RadioButton)dialog.findViewById(R.id.radio_indoors)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        ((RadioButton)dialog.findViewById(R.id.radio_competitive)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if(isChecked)
-                    category = 0;
-                else
-                    category = 1;
+                gameMode = !isChecked ? 0 : 1;
+
+                tvSearchItem = (TextView) dialog.findViewById(R.id.tvSearchItem);
+                etSearchItem = (EditText) dialog.findViewById(R.id.etSearchItem);
+                rgWordType = (RadioGroup) dialog.findViewById(R.id.rgWordType);
+                tvWordType = (TextView) dialog.findViewById(R.id.tvWordType);
+
+                if(gameMode == 1)
+                {
+                    tvSearchItem.setVisibility(View.GONE);
+                    etSearchItem.setVisibility(View.GONE);
+                    rgWordType.setVisibility(View.GONE);
+                    tvWordType.setVisibility(View.GONE);
+                } else {
+                    tvSearchItem.setVisibility(View.VISIBLE);
+                    etSearchItem.setVisibility(View.VISIBLE);
+                    rgWordType.setVisibility(View.VISIBLE);
+                    tvWordType.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        ((RadioButton)dialog.findViewById(R.id.radio_custom)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                wordChoice = !isChecked ? 0 : 1;
+
+                tvSearchItem = (TextView) dialog.findViewById(R.id.tvSearchItem);
+                etSearchItem = (EditText) dialog.findViewById(R.id.etSearchItem);
+
+                if(wordChoice == 1)
+                {
+                    tvSearchItem.setVisibility(View.VISIBLE);
+                    etSearchItem.setVisibility(View.VISIBLE);
+                } else {
+                    tvSearchItem.setVisibility(View.GONE);
+                    etSearchItem.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        ((RadioButton)dialog.findViewById(R.id.radio_outdoors)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                gameCategory = !isChecked ? 0 : 1;
             }
         });
 

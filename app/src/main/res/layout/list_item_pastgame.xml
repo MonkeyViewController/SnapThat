@@ -6,53 +6,77 @@
     android:orientation="horizontal"
     android:padding="5dp">
 
-    <ImageView
+    <com.makeramen.roundedimageview.RoundedImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ivWinningImage"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY"
+        app:riv_corner_radius="4dip"/>
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/black_transparent_70"
-        android:orientation="vertical"
-        android:padding="3dp">
+        android:background="@drawable/bottom_rounded_rect"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvTermAndWinner"
-            style="@style/InPictureTextView"
-            android:layout_width="match_parent"
+            android:id="@+id/tvTerm"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:singleLine="true"
-            android:gravity="start"/>
+            android:textColor="#512DA8"
+            android:gravity="start"
+            android:textStyle="bold"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp">
 
             <TextView
-                android:id="@+id/tvPlayers"
-                style="@style/InPictureTextView"
+                android:id="@+id/tvWinner"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_group_white_24dp"
-                android:drawablePadding="5dip"
-                android:paddingLeft="10dp" />
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:textColor="@color/gray_transparent_65"
+                android:gravity="start"/>
 
-            <TextView
-                android:id="@+id/tvSubmissions"
-                style="@style/InPictureTextView"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_camera_white_24dp"
-                android:drawablePadding="5dip"
-                android:paddingLeft="10dp"/>
+                android:layout_marginRight="16dp"
+                android:gravity="right">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tvPlayers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_action_group_grey"
+                    android:drawablePadding="5dip"
+                    android:paddingLeft="10dp" />
+
+                <TextView
+                    android:id="@+id/tvSubmissions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_action_camera_grey"
+                    android:drawablePadding="5dip"
+                    android:paddingLeft="10dp"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

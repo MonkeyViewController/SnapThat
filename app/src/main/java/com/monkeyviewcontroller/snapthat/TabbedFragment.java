@@ -24,6 +24,7 @@ import java.util.List;
 public class TabbedFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private View abShadow;
 
     public static TabbedFragment newInstance(int sectionNumber) {
         Log.d("MVC", "ViewPageSec: " + sectionNumber);
@@ -45,6 +46,8 @@ public class TabbedFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_viewpager,container, false);
+
+        abShadow = (View) rootView.findViewById(R.id.abShadow);
 
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         if (viewPager != null) {

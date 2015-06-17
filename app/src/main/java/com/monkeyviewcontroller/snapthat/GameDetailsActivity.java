@@ -3,8 +3,12 @@ package com.monkeyviewcontroller.snapthat;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -12,16 +16,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.support.v7.widget.Toolbar;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.monkeyviewcontroller.snapthat.Adapters.BasicCommentListAdapter;
-import com.monkeyviewcontroller.snapthat.Adapters.FullCommentListAdapter;
 import com.monkeyviewcontroller.snapthat.Models.Comment;
 import com.monkeyviewcontroller.snapthat.Models.Game;
 import com.monkeyviewcontroller.snapthat.Models.Like;
-import com.monkeyviewcontroller.snapthat.Views.ObservableScrollView;
 import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
-import com.nirhart.parallaxscroll.views.ParallaxScrollView;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseAnalytics;
@@ -35,21 +36,23 @@ import com.squareup.picasso.Picasso;
 import java.util.Collections;
 import java.util.List;
 
-public class GameDetailsActivity extends Activity {
+public class GameDetailsActivity extends AppCompatActivity {
 
     private Game game;
     private String gameId;
-    private ImageView ivHeader;
+
     private TextView tvSubmissions;
     private ImageView ivLike;
+    private ImageView ivComment;
+
     private TextView tvWinner;
     private TextView tvItem;
     private TextView tvTime;
     private TextView tvNumSubmissions;
-    private ObservableScrollView svGameDetails;
+    private ImageView ivBackdrop;
     private FloatingActionButton fabExpand;
     private LinearLayout llGameDetails;
-    private ImageView ivComment;
+
     private LinearLayout llProgressBar;
     private LinearLayout llEmptyList;
     private BasicCommentListAdapter listAdapter;
@@ -75,7 +78,10 @@ public class GameDetailsActivity extends Activity {
 
     public void setupViews()
     {
-        Log.d("MVC", "setupViews");
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         tvSubmissions = (TextView) findViewById(R.id.tvSubmissions);
         ivLike = (ImageView) findViewById(R.id.ivLike);
         tvWinner = (TextView) findViewById(R.id.tvWinner);
@@ -83,28 +89,18 @@ public class GameDetailsActivity extends Activity {
         tvTime = (TextView) findViewById(R.id.tvTime);
         tvNumSubmissions = (TextView) findViewById(R.id.tvNumSubmissions);
 
-        Log.d("MVC", "setupViews2");
-        ivHeader = (ImageView) findViewById(R.id.ivHeader);
-        svGameDetails = (ObservableScrollView) findViewById(R.id.svGameDetails);
+        ivBackdrop = (ImageView) findViewById(R.id.ivBackdrop);
         fabExpand = (FloatingActionButton) findViewById(R.id.fabExpand);
         llGameDetails = (LinearLayout) findViewById(R.id.llGameDetails);
         ivComment = (ImageView) findViewById(R.id.ivComment);
         tvCommentStatus = (TextView) findViewById(R.id.tvCommentStatus);
         tvDivider = (TextView) findViewById(R.id.tvDivider);
-        Log.d("MVC", "setupViews3");
 
         llProgressBar = (LinearLayout) findViewById(R.id.llProgressBar);
         llProgressBar.setVisibility(View.VISIBLE);
         llEmptyList = (LinearLayout) findViewById(R.id.llEmptyList);
         lvQueryResults = (ListView) findViewById(R.id.lvQueryResults);
         tvEmptyList = (TextView)  findViewById(R.id.tvEmptyList);
-
-        svGameDetails.setScrollViewListener(new ObservableScrollView.ScrollViewListener() {
-            @Override
-            public void onScrollChanged(ObservableScrollView scrollView, int x, int y) {
-                fabExpand.setTranslationY(-y);
-            }
-        });
 
         ivComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +152,21 @@ public class GameDetailsActivity extends Activity {
             }
         });
 
-        Log.d("MVC", "Finished setting up view.");
+        /*CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle(cheeseName);*/
+
+        //Log.d("MVC", "Finished setting up views.");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -226,14 +236,6 @@ public class GameDetailsActivity extends Activity {
                         animationAdapter.setAbsListView(lvQueryResults);
                         lvQueryResults.setAdapter(animationAdapter);
                         setListViewHeightBasedOnChildren(lvQueryResults, listAdapter);
-
-                        svGameDetails.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                svGameDetails.scrollTo(0, 0);
-                            }
-                        });
-
                     }
                 } else {
                     Log.d("MVC", "Error: " + e.getMessage());
@@ -343,6 +345,6 @@ public class GameDetailsActivity extends Activity {
                 load(game.getWinningSubmission().getPhotoURL())
                 .error(R.drawable.placeholder)
                 .placeholder(R.drawable.placeholder)
-                .into(ivHeader);
+                .into(ivBackdrop);
     }
 }

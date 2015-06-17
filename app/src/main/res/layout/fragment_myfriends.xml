@@ -19,12 +19,12 @@
     </LinearLayout>
 
     <com.getbase.floatingactionbutton.FloatingActionButton
-        android:id="@+id/pink_icon"
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        fab:fab_icon="@android:drawable/ic_menu_more"
-        fab:fab_colorNormal="@color/custom_light_blue"
-        fab:fab_colorPressed="@color/ics_blue"
+        fab:fab_icon="@drawable/ic_action_joypad"
+        fab:fab_colorNormal="#FF4081"
+        fab:fab_colorPressed="#C2185B"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"/>

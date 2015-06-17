@@ -29,3 +29,6 @@
 -keep class com.google.gson.examples.android.model.** { *; }
 
 -dontwarn com.squareup.okhttp.**
+-keep class android.support.design.widget.** { *; }
+-keep interface android.support.design.widget.** { *; }
+-dontwarn android.support.design.**

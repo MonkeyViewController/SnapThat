@@ -34,7 +34,8 @@ import org.w3c.dom.Text;
 public class PastGameListAdapter extends ArrayAdapter<Game> {
 
     private static class ViewHolder {
-        TextView tvTermAndWinner;
+        TextView tvTerm;
+        TextView tvWinner;
         //total time taken?
         TextView tvPlayers;
         TextView tvSubmissions;
@@ -55,7 +56,8 @@ public class PastGameListAdapter extends ArrayAdapter<Game> {
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.list_item_pastgame, parent, false);
-            viewHolder.tvTermAndWinner = (TextView) convertView.findViewById(R.id.tvTermAndWinner);
+            viewHolder.tvWinner = (TextView) convertView.findViewById(R.id.tvWinner);
+            viewHolder.tvTerm = (TextView) convertView.findViewById(R.id.tvTerm);
             viewHolder.tvPlayers = (TextView) convertView.findViewById(R.id.tvPlayers);
             viewHolder.tvSubmissions = (TextView) convertView.findViewById(R.id.tvSubmissions);
             viewHolder.ivWinningImage = (ImageView) convertView.findViewById(R.id.ivWinningImage);
@@ -70,7 +72,8 @@ public class PastGameListAdapter extends ArrayAdapter<Game> {
             e.printStackTrace();
         }
 
-        viewHolder.tvTermAndWinner.setText(winningGame.getSearchItem() + " [" + winningGame.getWinningSubmission().getCreatorUsername() + "]");
+        viewHolder.tvTerm.setText(winningGame.getSearchItem());
+        viewHolder.tvWinner.setText(winningGame.getWinningSubmission().getCreatorUsername());
         viewHolder.tvSubmissions.setText(String.valueOf(winningGame.getSubmissions().length()));
         viewHolder.tvPlayers.setText(String.valueOf(winningGame.getParticipants().length()));
 

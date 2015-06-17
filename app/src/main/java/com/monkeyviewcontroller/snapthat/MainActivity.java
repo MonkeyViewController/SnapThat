@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        //TextView tvNavUsername = (TextView)navigationView.findViewById(R.id.nav_username);
-        //tvNavUsername.setText(ParseUser.getCurrentUser().getUsername());
+        TextView tvNavUsername = (TextView)navigationView.findViewById(R.id.nav_username);
+        tvNavUsername.setText(ParseUser.getCurrentUser().getUsername());
 
         //setFragment(TabbedFragment.newInstance(0)); //set the Friends viewpager as the initial view
         setFragment(new PastGamesFragment());
@@ -122,12 +122,12 @@ public class MainActivity extends AppCompatActivity {
             case R.id.nav_games:
                 fragment = TabbedFragment.newInstance(1);
                 break;
-            /*case 3:
-                fragment = new ActivityFragment();
+            case R.id.nav_activity:
+                fragment = new BasicFragment();
                 break;
-            case 4:
-                fragment = new SettingsFragment();
-                break;*/
+            case R.id.nav_settings:
+                fragment = new BasicFragment();
+                break;
             case R.id.nav_logout:
                 logout();
                 break;
